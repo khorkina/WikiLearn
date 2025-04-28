@@ -644,6 +644,30 @@ details[open] summary {
   margin-bottom: .5rem;
 }
 
+.btn-ai {
+  background: var(--light-blue, #add8e6);   /* цвета из твоей палитры */
+  color: var(--black, #333);
+  padding: var(--space-md, 1rem) var(--space-lg, 1.5rem);
+  font-size: 1.05rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,.15);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.btn-ai:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,.2);
+}
+
+.ai-login-wrapper {
+  margin: var(--space-lg, 1.5rem) 0;  /* чтобы отделить от соседних кнопок */
+  text-align: center;                 /* выравниваем по центру */
+}
+
+
 /* ---------- 6. Акцентные элементы ---------- */
 strong { color: var(--c-soft-red); }
 

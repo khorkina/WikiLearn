@@ -20,6 +20,41 @@
     {% block head_extra %}{% endblock %}
 </head>
 <body>
+    <script src="https://js.puter.com/v2/"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  const wrapper = document.querySelector('.ai-login-wrapper');
+  const btn     = document.getElementById('ai-login-btn');
+
+  if (!btn) {
+    console.warn('AI-login button not found in DOM');
+    return;                   // ничего не городим, если кнопка не нашлась
+  }
+
+  // если токен уже есть – скрываем
+  if (localStorage.getItem('puter.auth')) {
+    wrapper.style.display = 'none';
+    return;
+  }
+
+  // навешиваем обработчик
+  btn.addEventListener('click', async () => {
+    try {
+      await puter.auth.signIn({ provider: 'anonymous' });           // или 'google'
+      await puter.perms.grantOrigin(location.origin, 'ai:*');
+      alert('AI enabled! Перезагружаю страницу.');
+      location.reload();
+    } catch (err) {
+      console.error(err);
+      alert('Не удалось включить AI: ' + (err?.error?.message || err.message));
+    }
+  });
+
+});
+</script>
+
+
     <header class="header">
         <div class="back-nav">
             {% block back_button %}

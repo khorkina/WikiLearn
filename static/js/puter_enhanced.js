@@ -47,57 +47,45 @@ function generateSummaryWithPuter(articleTitle, englishLevel) {
     `;
     
     // Try different models in order of preference
-    tryModelsForSummary(prompt, summaryContent, englishLevel);
+    tryModelsForSummary(prompt, summaryContent, englishLevel, articleTitle);
 }
 
 // Function to try different models for summary generation
-function tryModelsForSummary(prompt, summaryContent, englishLevel) {
-    // First try with gpt-4o-mini - most capable mini model
+function tryModelsForSummary(prompt, summaryContent, englishLevel, articleTitle) {
+    // вспомогалка, чтобы не копировать-вставлять один и тот же блок
+    const applyResult = (resp) => {
+      const formatted = formatAIResponse(resp);
+      summaryContent.innerHTML = formatted;
+      sessionStorage.setItem(`summary_${articleTitle}_${englishLevel}`, formatted);
+    };
+  
+    // а это — вспомогалка для логов
+    const why = (e) => e?.error?.message || e?.message || e;
+  
+    // — 1 —
     puter.ai.chat(prompt, { model: "gpt-4o-mini" })
-        .then(response => {
-            // Process the response to format vocabulary words
-            const formattedResponse = formatAIResponse(response);
-            summaryContent.innerHTML = formattedResponse;
-            
-            // Store in session storage
-            const articleTitle = document.getElementById('article-title').value;
-            sessionStorage.setItem(`summary_${articleTitle}_${englishLevel}`, formattedResponse);
-        })
-        .catch(error => {
-            console.error('Error with gpt-4o-mini, trying o1-mini:', error);
-            
-            // Try with o1-mini as fallback
-            puter.ai.chat(prompt, { model: "o1-mini" })
-                .then(response => {
-                    const formattedResponse = formatAIResponse(response);
-                    summaryContent.innerHTML = formattedResponse;
-                    
-                    // Store in session storage
-                    const articleTitle = document.getElementById('article-title').value;
-                    sessionStorage.setItem(`summary_${articleTitle}_${englishLevel}`, formattedResponse);
-                })
-                .catch(error2 => {
-                    console.error('Error with o1-mini, trying o3-mini:', error2);
-                    
-                    // Try with o3-mini as a second fallback
-                    puter.ai.chat(prompt, { model: "o3-mini" })
-                        .then(response => {
-                            const formattedResponse = formatAIResponse(response);
-                            summaryContent.innerHTML = formattedResponse;
-                            
-                            // Store in session storage
-                            const articleTitle = document.getElementById('article-title').value;
-                            sessionStorage.setItem(`summary_${articleTitle}_${englishLevel}`, formattedResponse);
-                        })
-                        .catch(error3 => {
-                            console.error('Error with all models, using extract from article:', error3);
-                            
-                            // If all models fail, extract content from the article itself
-                            generateBasicSummary(articleTitle, englishLevel, summaryContent);
-                        });
-                });
-        });
-}
+      .then(applyResult)
+      .catch(e1 => {
+        console.error("4o-mini:", why(e1));
+  
+        // — 2 —
+        puter.ai.chat(prompt, { model: "o1-mini" })
+          .then(applyResult)
+          .catch(e2 => {
+            console.error("o1-mini:", why(e2));
+  
+            // — 3 —
+            puter.ai.chat(prompt, { model: "o3-mini" })
+              .then(applyResult)
+              .catch(e3 => {
+                console.error("o3-mini:", why(e3));
+                // запасной план
+                generateBasicSummary(articleTitle, englishLevel, summaryContent);
+              });
+          });
+      });
+  }
+  
 
 // ---------------------------------------------
 // Универсальный парсер ответа Puter.js
