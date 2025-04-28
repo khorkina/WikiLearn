@@ -34,6 +34,21 @@
     <a id="create-lesson-btn" class="create-lesson-btn">
         Create a Lesson
     </a>
+    <div class="extra-buttons">
+        <button id="train-grammar-btn"   class="btn-secondary">Train Grammar</button>
+        <button id="train-vocabulary-btn" class="btn-secondary">Train Vocabulary</button>
+        <button id="extra-exercises-btn"  class="btn-secondary">Extra Exercises</button>
+      </div>
+      
+      <!-- вывод упражнений в том же «бежевом» стиле, что и урок -->
+      <div id="extra-output" class="lesson-container"></div>
+
+        
+    
+    
+    <!-- сюда будут прилетать материалы -->
+    <div id="extra-output"></div>
+  
     
     <!-- Hidden inputs for JavaScript -->
     <input type="hidden" id="article-title" value="{{ article.title }}">

@@ -90,35 +90,37 @@ function tryModelsForSummary(prompt, summaryContent, englishLevel, articleTitle)
 // ---------------------------------------------
 // Универсальный парсер ответа Puter.js
 // ---------------------------------------------
+// WikiLearn - Enhanced Puter.js Integration (updated formatAIResponse)
+// -----------------------------------------------------------------
+// … остальной код без изменений …
+
 function formatAIResponse(response) {
-    let text;
-
-    if (typeof response === 'string') {
-        text = response;                             // чистая строка
-    } else if (response?.message?.content) {
-        text = response.message.content;             // формат {message:{content:"…"}}
-    } else if (response?.choices?.[0]?.message?.content) {
-        text = response.choices[0].message.content;  // формат {choices:[{message:{content:"…"}}]}
-    } else {
-        // неизвестный формат – показать JSON
-        return `<pre>${JSON.stringify(response, null, 2)}</pre>`;
-    }
-
-    // ---- Markdown → простой HTML ----------------
+    // 1. вытаскиваем текст из разных форматов ответа Puter
+    let text = typeof response === 'string'
+             ? response
+             : (response?.message?.content || response?.choices?.[0]?.message?.content || JSON.stringify(response, null, 2));
+  
+    // 2. убираем ограждения ```html … ``` если модель прислала код‑блок
+    text = text.replace(/^```[a-z]*\n?/i, '').replace(/```$/i, '').trim();
+  
+    // 3. минимальный Markdown → HTML (оставляя уже готовый HTML нетронутым)
     text = text
-      .replace(/^# (.*$)/gim, '<h2>$1</h2>')        // # Heading
-      .replace(/^## (.*$)/gim, '<h3>$1</h3>')       // ## Heading
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // **bold**
-
-    // двойные переводы строк превращаем в абзацы
-    text = text
-      .split(/\n{2,}/)
-      .map(p => `<p>${p.trim()}</p>`)
-      .join('');
-
+      .replace(/^### (.*)$/gim, '<h3>$1</h3>')  // ### → h3
+      .replace(/^## (.*)$/gim,  '<h2>$1</h2>')  // ##  → h2
+      .replace(/^# (.*)$/gim,   '<h1>$1</h1>')  // #   → h1
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  
+    // 4. преврати двойные переводы строк в <p>, НЕ трогая строки, которые уже HTML
+    text = text.split(/\n{2,}/).map(seg => {
+        const s = seg.trim();
+        return /^</.test(s) ? s : `<p>${s}</p>`;
+    }).join('');
+  
     return text;
-}
-
+  }
+  
+  // … остаётся дальнейший код скрипта …
+  
 
 // Generate a basic summary from the article content
 function generateBasicSummary(articleTitle, englishLevel, summaryContent) {
@@ -474,6 +476,44 @@ function generateBasicLesson(articleContent, englishLevel, lessonContainer) {
     lessonContainer.innerHTML = lessonHTML;
 }
 
+async function generateExtraWithPuter(articleContent, englishLevel, mode, outEl) {
+    // Map level to short descriptor
+    const levelMap = {
+      elementary: 'A1‑A2 (elementary)',
+      intermediate: 'B1‑B2 (intermediate)',
+      professional: 'C1‑C2 (advanced)'
+    };
+  
+    // Difficulty modifiers for tasks
+    const difficultyTip = {
+      elementary: 'Keep sentences short (≤10 words) and avoid complex clauses.',
+      intermediate: 'Use a mix of simple and compound sentences; introduce a few idioms.',
+      professional: 'Feel free to use complex grammar and academic vocabulary.'
+    }[englishLevel] || '';
+  
+    // Prompt snippets per mode
+    const modePrompt = {
+      grammar: `Create **3 GRAMMAR drills** appropriate for ${levelMap[englishLevel]}.\n\n1. **Gap‑fill (10 items):** remove verbs from key sentences in the article and ask the learner to supply the correct tense or form.\n2. **Sentence transformation (10 items):** rewrite sentences (active↔passive, direct↔reported speech, etc.).\n3. **Error correction (10 items):** present sentences with one mistake each.\n\n${difficultyTip}\nFor every item provide the correct answer **inside** <details><summary>Answer</summary>…</details>.`,
+  
+      vocabulary: `Create **3 VOCABULARY tasks** for ${levelMap[englishLevel]}.\n\n1. **Matching (10 pairs):** word ⇄ simple definition.\n2. **Synonym/Antonym MCQ (10 items).**\n3. **Collocations gap‑fill (10 items).**\n\nChoose words that actually appear in the article. Put all keys inside <details><summary>Answers</summary>…</details>.`,
+  
+      extra: `Create **3 EXTRA exercises** suitable for ${levelMap[englishLevel]}.\n\n1. **Writing prompt**: 80‑${englishLevel==='professional'?'150':'120'} words.\n2. **Speaking task**: pair‑work with 5 guiding questions.\n3. **Creative activity**: e.g. design a Kahoot‑style quiz (5 Qs) or a role‑play scenario.\n\nHide sample answers or guidance in <details> blocks.`,
+    }[mode];
+  
+    const prompt = `You are WikiLearn, an ESL content generator. Based on the Wikipedia extract below, create the requested materials.\n\n${modePrompt}\n\n=== ARTICLE START ===\n${articleContent}\n=== ARTICLE END ===\n\nReturn **clean HTML only**.`;
+  
+    // loading spinner
+    outEl.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Generating…</div>';
+  
+    try {
+      const resp = await puter.ai.chat(prompt, { model: 'gpt-4o-mini' });
+      outEl.innerHTML = formatAIResponse(resp);
+    } catch (e) {
+      console.error('extra-gen:', e?.error?.message || e);
+      outEl.innerHTML = '<p class="error-message">Failed to generate extra materials. Try again later.</p>';
+    }
+  }
+  
 // Initialize functionality when the document is loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Check if we're on the summary page
@@ -491,6 +531,25 @@ document.addEventListener('DOMContentLoaded', function() {
             // Generate a new summary
             generateSummaryWithPuter(articleTitle, englishLevel);
         }
+        // === EXTRA TRAINING BUTTONS =========================================
+        const extraOutput        = document.getElementById('extra-output');
+        const trainGrammarBtn    = document.getElementById('train-grammar-btn');
+        const trainVocabBtn      = document.getElementById('train-vocabulary-btn');
+        const extraExercisesBtn  = document.getElementById('extra-exercises-btn');
+
+        if (trainGrammarBtn && extraOutput){
+        const articleTitle   = document.getElementById('article-title').value;
+        const englishLevel   = document.getElementById('english-level').value;
+        const articleContent = sessionStorage.getItem(`article_${articleTitle}`);
+
+        const launch = (mode) =>
+            generateExtraWithPuter(articleContent, englishLevel, mode, extraOutput);
+
+        trainGrammarBtn   .addEventListener('click', () => launch('grammar'));
+        trainVocabBtn     .addEventListener('click', () => launch('vocabulary'));
+        extraExercisesBtn .addEventListener('click', () => launch('extra'));
+}
+
     }
     
     // Check if we're on the generate summary page (article.html)

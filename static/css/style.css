@@ -668,6 +668,28 @@ details[open] summary {
 }
 
 
+/* … */
+/* Кнопки «Train…» */
+.extra-buttons{
+  display:flex;
+  justify-content:center;      /* <-- ровно по центру  */
+  gap:var(--space-sm,0.5rem);
+  margin:1.5rem 0;
+}
+
+.btn-secondary{
+  background:var(--light-blue);
+  color:var(--black);
+  border:none;
+  border-radius:6px;
+  padding:.55rem 1.1rem;
+}
+.btn-secondary:focus-visible{
+  outline:2px solid var(--c-accent);  /* аккуратный фокус вместо «ушек» */
+  outline-offset:2px;
+}
+
+
 /* ---------- 6. Акцентные элементы ---------- */
 strong { color: var(--c-soft-red); }
 
