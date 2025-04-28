@@ -559,6 +559,10 @@ a:hover {
     grid-template-columns: repeat(3, 1fr);
   }
 
+
+  .article-feed  { grid-template-columns: repeat(3, 1fr); }
+}
+
 /* ---------- 1. Цветовая палитра (Kofi–like) ---------- */
 :root {
   --c-bg:          #ffffff;      /* белый фон */
@@ -650,4 +654,4 @@ strong { color: var(--c-soft-red); }
   h1     { font-size: 1.45rem; }
 }
 
-}
+
