@@ -1,0 +1,66 @@
+Create a Flask application in Python called WikiLearn.
+
+This application should be mobile-first and feature a minimalistic design, inspired by KoFi, using only white, beige, black, light blue, and light red colors.
+
+Core functionality:
+
+Homepage:
+When the user enters the app, they should see large, clickable categories such as Politics, Art, History, Culture, Literature, Music, and as many more as possible.
+
+Subcategories:
+Clicking a category opens related subcategories.
+For example:
+
+History → Different historical periods
+
+Literature → Various literary movements
+
+Music → Different music genres, etc.
+
+Random Article Feed:
+After selecting a subcategory, the user should see an infinite scrolling feed of randomly selected Wikipedia articles presented as scrollable cards.
+Each card should display:
+
+An image (if available)
+
+A short description (summary)
+
+A "Read More" button
+
+Filtering Option:
+Users should have the option to view either all articles or only articles with images.
+
+"Read More" Page:
+When clicking "Read More," the user is taken to a page where the full Wikipedia article is displayed with its images and text properly formatted.
+
+English Level Selection:
+At the top of the "Read More" page, the user must select their English level:
+
+Elementary (A1-A2)
+
+Intermediate (B1-B2)
+
+Professional (C1-C2)
+
+Generate Summary:
+After choosing their level, users can click "Generate Summary".
+Using the Putter.js library, the app must generate a custom summary of the article, tailored to the vocabulary and grammar appropriate to the selected English level.
+
+Create a Lesson:
+After reading the summary, users should be able to click "Create a Lesson", which will:
+
+Automatically generate a lesson plan based on the article and their selected level, including:
+
+A table with 10 vocabulary words + definitions suitable for their level
+
+Example usages for each word
+
+Exercises based on the article content (e.g., fill-in-the-blanks, true/false questions, speaking prompts, etc.)
+
+Technical Notes:
+
+Integrate Wikipedia API for fetching articles.
+
+Integrate Putter.js for text summarization and lesson generation.
+
+Ensure the UI is responsive and optimized for mobile devices.

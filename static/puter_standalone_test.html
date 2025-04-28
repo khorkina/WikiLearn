@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puter.js Standalone Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .test-container {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 50px;
+            background-color: #f9f9f9;
+        }
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+        .error {
+            color: #D8000C;
+            background-color: #FFD2D2;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            color: #4F8A10;
+            background-color: #DFF2BF;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            min-height: 100px;
+            background-color: #f5f5f5;
+            white-space: pre-wrap;
+        }
+    </style>
+    <!-- Puter.js for AI capabilities -->
+    <script src="https://js.puter.com/v2/"></script>
+</head>
+<body>
+    <h1>Puter.js Standalone Test</h1>
+    
+    <p>This is a direct implementation of the examples from the Puter.js documentation.</p>
+    <p><a href="/">Back to WikiLearn</a></p>
+    
+    <div class="test-container">
+        <h2>Example 1: Simple Chat</h2>
+        <button id="test-chat">What are the benefits of exercise?</button>
+        <div id="result-chat" class="result">Results will appear here...</div>
+    </div>
+    
+    <div class="test-container">
+        <h2>Example 4: Using o1-mini Model</h2>
+        <button id="test-o1-mini">Write a short poem about coding (o1-mini)</button>
+        <div id="result-o1-mini" class="result">Results will appear here...</div>
+    </div>
+    
+    <div class="test-container">
+        <h2>Example 4: Using o3-mini Model</h2>
+        <button id="test-o3-mini">Write a short poem about coding (o3-mini)</button>
+        <div id="result-o3-mini" class="result">Results will appear here...</div>
+    </div>
+    
+    <div class="test-container">
+        <h2>Example 2: Generate Image</h2>
+        <button id="test-image">Generate image: A futuristic cityscape at night</button>
+        <div id="result-image" class="result">Image will appear here...</div>
+    </div>
+    
+    <div id="output" class="output"></div>
+    
+    <script>
+        // Enable the `puter.print` method as shown in examples
+        puter.print = function(html) {
+            const output = document.getElementById('output');
+            output.innerHTML += html + '<br>';
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Example 1: Chat
+            document.getElementById('test-chat').addEventListener('click', function() {
+                const resultDiv = document.getElementById('result-chat');
+                resultDiv.innerHTML = '<div class="loading">Testing... please wait</div>';
+                
+                try {
+                    puter.ai.chat("What are the benefits of exercise?")
+                        .then(response => {
+                            resultDiv.innerHTML = `<div class="success">${response}</div>`;
+                        })
+                        .catch(error => {
+                            resultDiv.innerHTML = `<div class="error">Error: ${error.message || 'Unknown error occurred'}</div>`;
+                            console.error('Puter.js error:', error);
+                        });
+                } catch (error) {
+                    resultDiv.innerHTML = `<div class="error">Exception: ${error.message || 'Unknown exception occurred'}</div>`;
+                    console.error('Exception:', error);
+                }
+            });
+            
+            // Example 4: o1-mini
+            document.getElementById('test-o1-mini').addEventListener('click', function() {
+                const resultDiv = document.getElementById('result-o1-mini');
+                resultDiv.innerHTML = '<div class="loading">Testing with o1-mini model... please wait</div>';
+                
+                try {
+                    puter.ai.chat("Write a short poem about coding", { model: "o1-mini" })
+                        .then(response => {
+                            resultDiv.innerHTML = `<div class="success">${response}</div>`;
+                        })
+                        .catch(error => {
+                            resultDiv.innerHTML = `<div class="error">Error: ${error.message || 'Unknown error occurred'}</div>`;
+                            console.error('Puter.js error with o1-mini:', error);
+                        });
+                } catch (error) {
+                    resultDiv.innerHTML = `<div class="error">Exception: ${error.message || 'Unknown exception occurred'}</div>`;
+                    console.error('Exception with o1-mini:', error);
+                }
+            });
+            
+            // Example 4: o3-mini
+            document.getElementById('test-o3-mini').addEventListener('click', function() {
+                const resultDiv = document.getElementById('result-o3-mini');
+                resultDiv.innerHTML = '<div class="loading">Testing with o3-mini model... please wait</div>';
+                
+                try {
+                    puter.ai.chat("Write a short poem about coding", { model: "o3-mini" })
+                        .then(response => {
+                            resultDiv.innerHTML = `<div class="success">${response}</div>`;
+                        })
+                        .catch(error => {
+                            resultDiv.innerHTML = `<div class="error">Error: ${error.message || 'Unknown error occurred'}</div>`;
+                            console.error('Puter.js error with o3-mini:', error);
+                        });
+                } catch (error) {
+                    resultDiv.innerHTML = `<div class="error">Exception: ${error.message || 'Unknown exception occurred'}</div>`;
+                    console.error('Exception with o3-mini:', error);
+                }
+            });
+            
+            // Example 2: Image generation
+            document.getElementById('test-image').addEventListener('click', function() {
+                const resultDiv = document.getElementById('result-image');
+                resultDiv.innerHTML = '<div class="loading">Generating image... please wait</div>';
+                
+                try {
+                    puter.ai.txt2img("A futuristic cityscape at night")
+                        .then(imageElement => {
+                            resultDiv.innerHTML = '';
+                            resultDiv.appendChild(imageElement);
+                        })
+                        .catch(error => {
+                            resultDiv.innerHTML = `<div class="error">Error: ${error.message || 'Unknown error occurred'}</div>`;
+                            console.error('Puter.js image error:', error);
+                        });
+                } catch (error) {
+                    resultDiv.innerHTML = `<div class="error">Exception: ${error.message || 'Unknown exception occurred'}</div>`;
+                    console.error('Exception with image generation:', error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

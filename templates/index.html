@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}WikiLearn - Learn English with Wikipedia{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <h1>Learn English with Wikipedia</h1>
+    <p>Select a category to explore articles and create custom language lessons</p>
+</div>
+
+<div class="category-grid">
+    {% for category in categories %}
+    <a href="{{ url_for('subcategories', category=category.name) }}" class="category-card">
+        <i class="fas fa-{{ category.icon }}"></i>
+        <h3>{{ category.name }}</h3>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

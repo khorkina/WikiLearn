@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puter.js Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #333;
+        }
+        .test-container {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 50px;
+            background-color: #f9f9f9;
+        }
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+        .error {
+            color: #D8000C;
+            background-color: #FFD2D2;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .info-box {
+            background-color: #e7f3fe;
+            border-left: 6px solid #2196F3;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        .success {
+            color: #4F8A10;
+            background-color: #DFF2BF;
+            padding: 10px;
+            border-radius: 4px;
+        }
+    </style>
+    <!-- Puter.js for AI capabilities -->
+    <script src="https://js.puter.com/v2/"></script>
+</head>
+<body>
+    <h1>Puter.js API Test Page</h1>
+    
+    <div class="info-box">
+        <p>This page tests the Puter.js functionality to ensure the API is working correctly.</p>
+        <p>Click the buttons below to test different features. If the API fails, the application will use a fallback method.</p>
+        <p><strong>Note:</strong> If you see "Permission denied" errors, the application will still work by using local processing.</p>
+        <p><a href="/">Back to WikiLearn</a></p>
+    </div>
+    
+    <div class="alert alert-info">
+        <h3>About Fallback Functionality</h3>
+        <p>WikiLearn now includes fallback functionality when Puter.js is unavailable or returns permission errors.</p>
+        <p>The fallback system will:</p>
+        <ul>
+            <li>First try the o1-mini model</li>
+            <li>If that fails, try the o3-mini model</li>
+            <li>If both fail, provide a basic summary/lesson created from the article text</li>
+        </ul>
+        <p>This ensures you can still use the basic features of WikiLearn even when the AI services are unavailable.</p>
+        <p><a href="/standalone-puter-test" target="_blank">Try our standalone test page</a> that follows the official Puter.js guide exactly.</p>
+    </div>
+    
+    <div class="test-container">
+        <h2>Test 1: Simple Response (Default Model)</h2>
+        <button id="test-simple">Run Simple Test</button>
+        <div id="result-simple" class="result">Results will appear here...</div>
+    </div>
+    
+    <div class="test-container">
+        <h2>Test 2: Using o1-mini Model</h2>
+        <button id="test-o1-mini">Test with o1-mini Model</button>
+        <div id="result-o1-mini" class="result">Results will appear here...</div>
+    </div>
+    
+    <div class="test-container">
+        <h2>Test 3: Using o3-mini Model</h2>
+        <button id="test-o3-mini">Test with o3-mini Model</button>
+        <div id="result-o3-mini" class="result">Results will appear here...</div>
+    </div>
+    
+    <div class="test-container">
+        <h2>Test 4: Article Summary with Mini Model</h2>
+        <textarea id="article-content" rows="5" style="width: 100%; margin-bottom: 10px;" placeholder="Paste article content here or use the sample text"></textarea>
+        <div class="model-selector" style="margin-bottom: 10px;">
+            <label>
+                <input type="radio" name="model" value="o1-mini" checked> o1-mini
+            </label>
+            <label style="margin-left: 15px;">
+                <input type="radio" name="model" value="o3-mini"> o3-mini
+            </label>
+        </div>
+        <button id="test-summary">Generate Summary</button>
+        <div id="result-summary" class="result">Results will appear here...</div>
+    </div>
+    
+    <script>
+        // Sample article text
+        const sampleText = "The Renaissance was a period in European history marking the transition from the Middle Ages to modernity and covering the 15th and 16th centuries. In addition to the standard periodization, proponents of a 'long Renaissance' may include the 14th century and the 17th century. The traditional view focuses more on the early modern aspects of the Renaissance and argues that it was a break from the past, but many historians today focus more on its medieval aspects and argue that it was an extension of the Middle Ages. However, the beginnings of the period – the early Renaissance of the 15th century and the Italian Proto-Renaissance from around 1250 or 1300 – overlap considerably with the Late Middle Ages, conventionally dated to c. 1250–1500, and the Middle Ages themselves were a long period filled with gradual changes, like the Modern Period; for these reasons, some historians have, particularly since the 1960s, rejected the notion that the Renaissance was a cultural 'break' or 'rebirth', instead seeing it as a continuation of the Middle Ages. The traditional view is that the Renaissance of the 15th century in Italy, spreading through the rest of Europe, represented a reconnection of the Western world with classical antiquity, the absorption of knowledge—particularly mathematics—from Arabic, the return of experimentalism, the focus on the importance of living well in the present, an explosion of the dissemination of knowledge brought on by printing and the creation of new techniques in art, poetry and architecture which led to a radical change in the style and substance of the arts and letters.";
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add sample text to textarea
+            document.getElementById('article-content').value = sampleText;
+            
+            // Test 1: Simple response with default model
+            document.getElementById('test-simple').addEventListener('click', function() {
+                const resultDiv = document.getElementById('result-simple');
+                resultDiv.innerHTML = '<div class="loading">Testing with default model... please wait</div>';
+                
+                try {
+                    puter.ai.chat('Say hello and describe what Puter.js is in one sentence.')
+                        .then(response => {
+                            resultDiv.innerHTML = `<div class="success">Success! Response: ${response}</div>`;
+                        })
+                        .catch(error => {
+                            resultDiv.innerHTML = `<div class="error">Error: ${error.message || 'Unknown error occurred'}</div>`;
+                            console.error('Puter.js error:', error);
+                        });
+                } catch (error) {
+                    resultDiv.innerHTML = `<div class="error">Exception: ${error.message || 'Unknown exception occurred'}</div>`;
+                    console.error('Exception:', error);
+                }
+            });
+            
+            // Test 2: Using o1-mini model
+            document.getElementById('test-o1-mini').addEventListener('click', function() {
+                const resultDiv = document.getElementById('result-o1-mini');
+                resultDiv.innerHTML = '<div class="loading">Testing with o1-mini model... please wait</div>';
+                
+                try {
+                    puter.ai.chat('Say hello and describe what Puter.js is in one sentence.', { model: "o1-mini" })
+                        .then(response => {
+                            resultDiv.innerHTML = `<div class="success">Success! Response from o1-mini: ${response}</div>`;
+                        })
+                        .catch(error => {
+                            resultDiv.innerHTML = `<div class="error">Error with o1-mini: ${error.message || 'Unknown error occurred'}</div>`;
+                            console.error('Puter.js error with o1-mini:', error);
+                        });
+                } catch (error) {
+                    resultDiv.innerHTML = `<div class="error">Exception with o1-mini: ${error.message || 'Unknown exception occurred'}</div>`;
+                    console.error('Exception with o1-mini:', error);
+                }
+            });
+            
+            // Test 3: Using o3-mini model
+            document.getElementById('test-o3-mini').addEventListener('click', function() {
+                const resultDiv = document.getElementById('result-o3-mini');
+                resultDiv.innerHTML = '<div class="loading">Testing with o3-mini model... please wait</div>';
+                
+                try {
+                    puter.ai.chat('Say hello and describe what Puter.js is in one sentence.', { model: "o3-mini" })
+                        .then(response => {
+                            resultDiv.innerHTML = `<div class="success">Success! Response from o3-mini: ${response}</div>`;
+                        })
+                        .catch(error => {
+                            resultDiv.innerHTML = `<div class="error">Error with o3-mini: ${error.message || 'Unknown error occurred'}</div>`;
+                            console.error('Puter.js error with o3-mini:', error);
+                        });
+                } catch (error) {
+                    resultDiv.innerHTML = `<div class="error">Exception with o3-mini: ${error.message || 'Unknown exception occurred'}</div>`;
+                    console.error('Exception with o3-mini:', error);
+                }
+            });
+            
+            // Test 4: Article summary with selected mini model
+            document.getElementById('test-summary').addEventListener('click', function() {
+                const resultDiv = document.getElementById('result-summary');
+                const articleContent = document.getElementById('article-content').value;
+                const selectedModel = document.querySelector('input[name="model"]:checked').value;
+                
+                if (!articleContent.trim()) {
+                    resultDiv.innerHTML = '<div class="error">Please enter some article content</div>';
+                    return;
+                }
+                
+                resultDiv.innerHTML = `<div class="loading">Generating summary with ${selectedModel} model... please wait</div>`;
+                
+                const prompt = `
+                    You are an educational assistant that creates language learning materials.
+                    
+                    I will provide you with an article. Please summarize this article in a way that is appropriate for intermediate level English learners.
+                    
+                    Use vocabulary and grammar suitable for B1-B2 English level. Use a mix of tenses but avoid complex structures.
+                    
+                    Make the summary engaging and educational.
+                    
+                    Here's the article content:
+                    ${articleContent}
+                `;
+                
+                try {
+                    puter.ai.chat(prompt, { model: selectedModel })
+                        .then(response => {
+                            resultDiv.innerHTML = `<div class="success"><p><strong>Generated Summary with ${selectedModel}:</strong></p>${response}</div>`;
+                        })
+                        .catch(error => {
+                            resultDiv.innerHTML = `<div class="error">Error with ${selectedModel}: ${error.message || 'Unknown error occurred'}</div>`;
+                            console.error(`Puter.js error with ${selectedModel}:`, error);
+                        });
+                } catch (error) {
+                    resultDiv.innerHTML = `<div class="error">Exception with ${selectedModel}: ${error.message || 'Unknown exception occurred'}</div>`;
+                    console.error(`Exception with ${selectedModel}:`, error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
