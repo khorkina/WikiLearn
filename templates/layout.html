@@ -16,12 +16,15 @@
     
     <!-- Puter.js for AI capabilities -->
     <script src="https://js.puter.com/v2/"></script>
-    
+
     {% block head_extra %}{% endblock %}
 </head>
+  
 <body>
     <script src="https://js.puter.com/v2/"></script>
 <script>
+
+
 document.addEventListener('DOMContentLoaded', () => {
 
   const wrapper = document.querySelector('.ai-login-wrapper');
@@ -52,19 +55,21 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
+
 </script>
 
 
-    <header class="header">
-        <div class="back-nav">
-            {% block back_button %}
-            {% if request.path != '/' %}
-            <a href="javascript:history.back()" class="back-btn">
-                <i class="fas fa-arrow-left"></i> <span>Back</span>
-            </a>
-            {% endif %}
-            {% endblock %}
-        </div>
+  <header class="header">
+    <div class="back-nav">
+      {% block back_button %}
+      {% if request.path != '/' %}
+      <a href="javascript:history.back()" class="back-btn">
+        <i class="fas fa-arrow-left"></i><span>Back</span>
+      </a>
+      {% endif %}
+      {% endblock %}
+    </div>
         
         <div class="logo">Wiki<span>Learn</span></div>
         
@@ -73,6 +78,57 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     </header>
     
+    <div class="wiki-search-wrapper">
+      <i class="fas fa-search search-icon"></i>          <!-- NEW -->
+      <input id="wiki-search" type="text"
+             placeholder="Search Wikipedia…" autocomplete="off">
+      <ul    id="wiki-suggest"  class="suggest-list"></ul>
+      <table id="wiki-results" class="wiki-results-table"></table>
+    </div>
+    
+
+    <script>
+      (() => {
+        const inp   = document.getElementById('wiki-search');
+        const list  = document.getElementById('wiki-suggest');
+        if (!inp) return;
+      
+        let timer;
+        inp.addEventListener('input', e => {
+          clearTimeout(timer);
+          const q = e.target.value.trim();
+          if (q.length < 2){ list.innerHTML=''; return; }
+      
+          timer = setTimeout(async () => {
+            // MediaWiki Opensearch (5 результатов)
+            const url = `https://en.wikipedia.org/w/api.php?action=opensearch&origin=*&limit=5&search=${encodeURIComponent(q)}`;
+            const res = await fetch(url).then(r=>r.json());
+            const titles = res[1];         // массив заголовков
+            const desc   = res[2];         // массив описаний
+            list.innerHTML = titles.map((t,i)=>
+              `<li data-title="${t}"><strong>${t}</strong> <small>${desc[i]||''}</small></li>`
+            ).join('');
+          }, 300);                         // дебаунс 300 мс
+        });
+      
+        // клик по подсказке → редирект
+        list.addEventListener('click', e => {
+          const li = e.target.closest('li');
+          if (!li) return;
+          const title = li.dataset.title;
+          window.location = `/article/${encodeURIComponent(title)}`;
+        });
+      
+        // Escape/клик вне — закрыть список
+        document.addEventListener('click', e=>{
+          if(!e.target.closest('.wiki-search-wrapper')) list.innerHTML='';
+        });
+        inp.addEventListener('keydown', e=>{
+          if(e.key==='Escape') list.innerHTML='';
+        });
+      })();
+      </script>
+
     <main class="container">
         {% block content %}{% endblock %}
     </main>

@@ -688,6 +688,75 @@ details[open] summary {
   outline:2px solid var(--c-accent);  /* аккуратный фокус вместо «ушек» */
   outline-offset:2px;
 }
+/* --- Search bar --- */
+.wiki-search-wrapper{
+  position:relative;
+  max-width:480px;
+  margin:2rem auto 1.5rem;
+}
+#wiki-search{
+  width:100%;
+  padding:.7rem 1rem .7rem 2.6rem;   /* → место слева под иконку */
+  border:2px solid var(--light-blue);
+  border-radius:50px;                /* круглые края */
+  font-size:1rem;
+  transition:border-color .25s, box-shadow .25s;
+  box-shadow:0 1px 3px rgba(0,0,0,.07);
+}
+#wiki-search:focus{
+  outline:none;
+  border-color:var(--c-accent);
+  box-shadow:0 0 0 3px rgba(8,123,175,.15); /* голубое свечение */
+}
+.search-icon{
+  position:absolute;
+  top:50%; left:1rem;
+  transform:translateY(-50%);
+  color:var(--c-muted);
+  pointer-events:none;               /* клики проходят сквозь */
+  font-size:1rem;
+}
+
+/* --- dropdown list --- */
+.suggest-list{
+  position:absolute; left:0; right:0; top:100%;
+  list-style:none; margin:.25rem 0 0; padding:0;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:12px;
+  box-shadow:0 4px 18px rgba(0,0,0,.08);
+  overflow:hidden;
+  z-index:999;
+}
+.suggest-list li{
+  padding:.6rem 1rem;
+  cursor:pointer;
+  transition:background .15s;
+}
+.suggest-list li+li{border-top:1px solid #f2f2f2;}
+.suggest-list li:hover{background:var(--beige);}
+
+/* --- results table (как было, но небольшие скругления) --- */
+.wiki-results-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:.9rem;
+  font-size:.95rem;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 4px 18px rgba(0,0,0,.08);
+}
+.wiki-results-table th,
+.wiki-results-table td{
+  padding:.55rem .9rem;
+  border:1px solid #eee;
+}
+.wiki-results-table th{
+  background:var(--beige);
+  font-weight:600;
+}
+.wiki-results-table tr:hover td{background:var(--light-blue);}
+
 
 
 /* ---------- 6. Акцентные элементы ---------- */
