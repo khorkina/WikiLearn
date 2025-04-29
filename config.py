@@ -26,7 +26,8 @@ CATEGORIES = [
     {"name": "Film", "icon": "film"},
     {"name": "Food", "icon": "utensils"},
     {"name": "Geography", "icon": "map-marked-alt"},
-    {"name": "Architecture", "icon": "building"}
+    {"name": "Architecture", "icon": "building"},
+    {"name": "Business", "icon": "briefcase"}
 ]
 
 # Map categories to subcategories
@@ -45,5 +46,7 @@ SUBCATEGORIES = {
     "Film": ["Directors", "Genres", "Film History", "Cinema Movements", "Film Technology"],
     "Food": ["Cuisine", "Cooking Methods", "Ingredients", "Food Culture", "Beverages"],
     "Geography": ["Continents", "Countries", "Oceans", "Mountains", "Climate", "Ecosystems"],
-    "Architecture": ["Ancient Architecture", "Modern Architecture", "Architectural Styles", "Famous Buildings", "Urban Planning"]
+    "Architecture": ["Ancient Architecture", "Modern Architecture", "Architectural Styles", "Famous Buildings", "Urban Planning"],
+    "Business": ["Economics", "Finance", "Marketing", "Entrepreneurship", "Management", "International Trade"
+    ]
 }
