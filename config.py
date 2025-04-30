@@ -2,6 +2,15 @@ import os
 import os
 from dotenv import load_dotenv
 load_dotenv()
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ModuleNotFoundError:
+    pass
+
+GENIUS_ACCESS_TOKEN = os.getenv("GENIUS_ACCESS_TOKEN")
+if not GENIUS_ACCESS_TOKEN:
+    raise RuntimeError("GENIUS_ACCESS_TOKEN is not set")
 
 from os import getenv
 GENIUS_TOKEN = os.getenv("GENIUS_ACCESS_TOKEN")   # ← уже сделали

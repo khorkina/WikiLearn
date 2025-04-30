@@ -1,16 +1,18 @@
 import os
 import logging
-from flask import Flask, render_template, request, redirect, url_for, jsonify, session
+from flask import Flask
 
-# Set up logging
-logging.basicConfig(level=logging.DEBUG)
+# --------------------------------------------------
+# базовая конфигурация
+# --------------------------------------------------
+logging.basicConfig(level=logging.INFO)
 
-# Initialize Flask app
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "wikilearn_dev_secret_key")
 
-# Import routes after app initialization to avoid circular imports
-from routes import *
+# 👇  всё маршрутизацией занимается routes.py
+from routes import *           # noqa: E402,F401
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+if __name__ == "__main__":
+    # при локальной разработке → Ctrl-C останавливает
+    app.run(host="0.0.0.0", port=5000, debug=True)
