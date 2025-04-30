@@ -757,6 +757,12 @@ details[open] summary {
 }
 .wiki-results-table tr:hover td{background:var(--light-blue);}
 
+/* --- одиночная карточка «Songs» под основной сеткой --- */
+.songs-card{
+  display:block;              /* на случай, если вдруг наследует flex */
+  margin: var(--space-lg,1.5rem) auto 0;  /* верхний отступ + центрирование */
+  max-width: 320px;           /* по желанию: чтобы ширина = клетке сетки */
+}
 
 
 /* ---------- 6. Акцентные элементы ---------- */

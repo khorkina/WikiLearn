@@ -3,6 +3,56 @@ from app import app
 from wikipedia_api import get_category_articles, get_subcategories, get_full_article
 from config import CATEGORIES, SUBCATEGORIES, ENGLISH_LEVELS
 import logging
+from flask import render_template, jsonify, request, abort
+import lyricsgenius, requests, os, itertools
+from config import GENIUS_TOKEN, SONG_GENRES, ENGLISH_LEVELS
+
+genius = lyricsgenius.Genius(GENIUS_TOKEN, skip_non_songs=True,
+                             excluded_terms=["(Remix)", "(Live)"],
+                             remove_section_headers=True)
+
+# 4.1  список жанров
+@app.route("/songs")
+def songs_genres():
+    return render_template("songs_genres.html", genres=SONG_GENRES)
+
+# 4.2  лента песен (HTML first + JSON for infinite scroll)
+@app.route("/songs/<genre>")
+def songs_feed(genre):
+    if genre not in SONG_GENRES:
+        abort(404)
+    return render_template("songs_feed.html", genre=genre)
+
+# API-эндпоинт подгрузки
+@app.route("/api/songs/<genre>")
+def api_songs(genre):
+    page = int(request.args.get("page", 1))
+    per  = 10
+    if genre not in SONG_GENRES:
+        return jsonify([])
+    # Genius search — сортировка по популярности
+    res = genius.search_lyrics(genre, per_page=per, page=page)
+    items = [{
+        "id": hit["result"]["id"],
+        "title": hit["result"]["title"],
+        "artist": hit["result"]["primary_artist"]["name"],
+        "thumb": hit["result"]["song_art_image_thumbnail_url"]
+    } for hit in res["sections"][0]["hits"]]
+    return jsonify(items)
+
+# 4.3  страница конкретной песни
+@app.route("/song/<int:song_id>")
+def song_page(song_id):
+    try:
+        song = genius.song(song_id)["song"]
+        lyrics = genius.lyrics(song_id)
+    except Exception:
+        abort(404)
+    return render_template("song.html",
+                           song=song,
+                           lyrics=lyrics,
+                           levels=ENGLISH_LEVELS)
+
 
 @app.route('/')
 def index():

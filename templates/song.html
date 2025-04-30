@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block title %}{{ song.full_title }} - WikiLearn{% endblock %}
+
+
+{% block content %}
+<h1>{{ song.full_title }}</h1>
+<img src="{{ song.song_art_image_url }}" class="img-fluid mb-3">
+
+<!-- lyrics -->
+<div class="exercise lesson-container">
+  <pre style="white-space:pre-wrap">{{ lyrics }}</pre>
+</div>
+
+<!-- выбор уровня + кнопки -->
+<div class="english-level-section">
+  <h2>Choose your English level</h2>
+  <div class="english-level-options">
+    {% for key,label in levels.items() %}
+    <button class="english-level-btn {% if loop.index==2 %}active{% endif %}"
+            data-level="{{ key }}">{{ label }}</button>
+    {% endfor %}
+  </div>
+  <button id="explain-btn" class="generate-btn mt-3">
+    Generate short explanation
+  </button>
+  <button id="lesson-btn" class="create-lesson-btn">
+    Create full lesson
+  </button>
+</div>
+
+<!-- вывод -->
+<div id="song-output" class="lesson-container"></div>
+
+<input type="hidden" id="song-title"  value="{{ song.full_title }}">
+<input type="hidden" id="lyrics"      value="{{ lyrics|replace('"','&quot;') }}">
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/puter_enhanced.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/puter_songs.js') }}"></script>
+{% endblock %}

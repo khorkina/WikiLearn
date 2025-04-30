@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}{{ genre }} Songs - WikiLearn{% endblock %}
+
+{% block content %}
+<h1>{{ genre }} songs</h1>
+<p>Scroll to load more.</p>
+
+<div id="song-feed" class="article-feed"></div>
+<div id="loading-indicator" class="loading d-none">
+  <div class="loading-spinner"></div><span>Loading…</span>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/songs_infinite.js') }}"></script>
+{% endblock %}

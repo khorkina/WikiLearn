@@ -1,4 +1,22 @@
 import os
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+from os import getenv
+GENIUS_TOKEN = os.getenv("GENIUS_ACCESS_TOKEN")   # ← уже сделали
+
+# если токен пуст– выводим понятную ошибку
+if not GENIUS_TOKEN:
+    raise RuntimeError("Set GENIUS_ACCESS_TOKEN in your environment")
+# … существующие …
+from os import getenv
+GENIUS_TOKEN = getenv("GENIUS_ACCESS_TOKEN")
+
+SONG_GENRES = [
+    "Pop", "Rock", "Hip-Hop", "R&B", "Country",
+    "Indie", "Electronic", "Metal", "Jazz", "Classical"
+]
 
 # Wikipedia API configuration
 WIKIPEDIA_API_ENDPOINT = "https://en.wikipedia.org/w/api.php"
@@ -27,7 +45,7 @@ CATEGORIES = [
     {"name": "Food", "icon": "utensils"},
     {"name": "Geography", "icon": "map-marked-alt"},
     {"name": "Architecture", "icon": "building"},
-    {"name": "Business", "icon": "briefcase"}
+    {"name": "Business", "icon": "briefcase"},
 ]
 
 # Map categories to subcategories
