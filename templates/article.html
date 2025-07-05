@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ article.title }} - WikiLearn{% endblock %}
+
+{% block content %}
+<div class="article-container">
+    {% if error %}
+    <div class="error-message">
+        {{ error }}
+    </div>
+    {% else %}
+    <div class="article-header">
+        <h1>{{ article.title }}</h1>
+        {% if article.image %}
+        <img src="{{ article.image }}" alt="{{ article.title }}" class="article-main-image">
+        {% endif %}
+    </div>
+    
+
+    <div class="english-level-section">
+        <h2>Select Your English Level</h2>
+        <div class="english-level-options">
+            <button class="english-level-btn" data-level="elementary">
+                Elementary (A1-A2)
+            </button>
+            <button class="english-level-btn active" data-level="intermediate">
+                Intermediate (B1-B2)
+            </button>
+            <button class="english-level-btn" data-level="professional">
+                Professional (C1-C2)
+            </button>
+        </div>
+        <input type="hidden" id="selected-level" value="intermediate">
+        <button id="generate-summary-btn" class="generate-btn">Generate Summary</button>
+    </div>
+    
+    <div class="article-body">
+        {{ article.content | safe }}
+    </div>
+    
+    <!-- Hidden inputs for JavaScript -->
+    <input type="hidden" id="article-title" value="{{ article.title }}">
+    <input type="hidden" id="article-content" value="{{ article.content }}">
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/puter_enhanced.js') }}"></script>
+{% endblock %}

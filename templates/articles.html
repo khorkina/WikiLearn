@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ subcategory }} Articles - WikiLearn{% endblock %}
+
+{% block head_extra %}
+<!-- Add intersection observer polyfill for older browsers -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"></script>
+{% endblock %}
+
+{% block content %}
+<div class="articles-header">
+    <h1>{{ subcategory }}</h1>
+    <p>Articles related to {{ category }} > {{ subcategory }}</p>
+</div>
+
+<div class="filter-toggle">
+    <label>
+        <input type="checkbox" id="images-only-toggle"> Show only articles with images
+    </label>
+</div>
+
+<div class="article-feed">
+    <!-- Articles will be loaded dynamically here -->
+</div>
+
+<div id="loading-indicator" class="loading">
+    <div class="loading-spinner"></div>
+    <span>Loading more articles...</span>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/wikipedia_api.js') }}"></script>
+<script src="{{ url_for('static', filename='js/infinite_scroll.js') }}"></script>
+{% endblock %}

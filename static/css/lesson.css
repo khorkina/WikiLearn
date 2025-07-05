@@ -1,0 +1,449 @@
+/* WikiLearn - Lesson-specific Styles */
+
+.lesson-container {
+    background: hsl(39 100% 95%); /* Light beige background */
+    border: 1px solid hsl(39 100% 85%);
+    border-radius: var(--radius);
+    margin: 2rem 0;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.lesson-container .loading {
+    background: hsl(39 100% 95%);
+    padding: 3rem 2rem;
+}
+
+/* Lesson Content Styling */
+.lesson-container h1 {
+    background: hsl(39 100% 85%);
+    color: hsl(26 83% 14%);
+    margin: 0;
+    padding: 2rem;
+    font-size: 2rem;
+    text-align: center;
+    border-bottom: 2px solid hsl(39 100% 80%);
+}
+
+.lesson-container h2 {
+    background: hsl(39 100% 90%);
+    color: hsl(26 83% 14%);
+    margin: 2rem 0 1rem 0;
+    padding: 1rem 2rem;
+    font-size: 1.5rem;
+    border-left: 4px solid hsl(39 100% 70%);
+}
+
+.lesson-container h3 {
+    color: hsl(26 83% 14%);
+    margin: 1.5rem 0 1rem 0;
+    padding: 0 2rem;
+    font-size: 1.25rem;
+}
+
+.lesson-container p {
+    color: hsl(26 83% 20%);
+    margin: 1rem 0;
+    padding: 0 2rem;
+    line-height: 1.7;
+}
+
+.lesson-container ul,
+.lesson-container ol {
+    margin: 1rem 0;
+    padding: 0 2rem 0 4rem;
+    color: hsl(26 83% 20%);
+}
+
+.lesson-container li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+/* Tables in Lessons */
+.lesson-container table {
+    width: calc(100% - 4rem);
+    margin: 1rem 2rem;
+    border-collapse: collapse;
+    background: hsl(var(--background));
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.lesson-container th {
+    background: hsl(39 100% 85%);
+    color: hsl(26 83% 14%);
+    padding: 1rem;
+    font-weight: 600;
+    text-align: left;
+    border-bottom: 2px solid hsl(39 100% 80%);
+}
+
+.lesson-container td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid hsl(var(--border));
+    color: hsl(var(--foreground));
+}
+
+.lesson-container tr:nth-child(even) {
+    background: hsl(39 100% 98%);
+}
+
+.lesson-container tr:hover {
+    background: hsl(39 100% 95%);
+}
+
+/* Exercise Sections */
+.exercise {
+    background: hsl(var(--background));
+    margin: 1.5rem 2rem;
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    border: 1px solid hsl(39 100% 85%);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.exercise h3 {
+    color: hsl(26 83% 14%);
+    margin: 0 0 1rem 0;
+    padding: 0;
+    font-size: 1.2rem;
+    border-bottom: 2px solid hsl(39 100% 85%);
+    padding-bottom: 0.5rem;
+}
+
+.exercise p {
+    padding: 0;
+    margin: 0.75rem 0;
+}
+
+.exercise ul,
+.exercise ol {
+    padding-left: 2rem;
+    margin: 1rem 0;
+}
+
+.exercise li {
+    margin-bottom: 0.75rem;
+}
+
+/* Details/Summary (Expandable Sections) */
+.lesson-container details {
+    margin: 1rem 2rem;
+    background: hsl(var(--background));
+    border: 1px solid hsl(39 100% 85%);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.lesson-container summary {
+    background: hsl(39 100% 90%);
+    color: hsl(26 83% 14%);
+    padding: 1rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid hsl(39 100% 85%);
+}
+
+.lesson-container summary:hover {
+    background: hsl(39 100% 85%);
+}
+
+.lesson-container details[open] summary {
+    background: hsl(39 100% 85%);
+}
+
+.lesson-container details > *:not(summary) {
+    padding: 1rem;
+    margin: 0;
+    color: hsl(var(--foreground));
+}
+
+.lesson-container details table {
+    width: 100%;
+    margin: 0;
+}
+
+/* Question Lists */
+.lesson-container .question-list {
+    counter-reset: question-counter;
+    padding: 0 2rem;
+}
+
+.lesson-container .question-list li {
+    counter-increment: question-counter;
+    margin-bottom: 1rem;
+    position: relative;
+    padding-left: 2rem;
+}
+
+.lesson-container img { 
+    max-width: 100%;
+    height: auto;
+}
+
+.lesson-container .question-list li::before {
+    content: counter(question-counter) ".";
+    position: absolute;
+    left: 0;
+    font-weight: 600;
+    color: hsl(26 83% 14%);
+}
+
+/* Word Bank Styling */
+.word-bank {
+    background: hsl(210 40% 98%);
+    border: 2px dashed hsl(210 40% 80%);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.word-bank h4 {
+    color: hsl(210 40% 15%);
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+}
+
+.word-bank ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.word-bank li {
+    background: hsl(210 40% 90%);
+    color: hsl(210 40% 15%);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Fill-in-the-blank styling */
+.blank {
+    display: inline-block;
+    min-width: 100px;
+    border-bottom: 2px solid hsl(26 83% 14%);
+    margin: 0 0.25rem;
+    text-align: center;
+    position: relative;
+}
+
+.blank::before {
+    content: "______";
+    color: hsl(26 83% 14%);
+    font-weight: bold;
+}
+
+/* Discussion Questions */
+.discussion-question {
+    background: hsl(0 84% 98%);
+    border-left: 4px solid hsl(0 84% 60%);
+    margin: 1rem 2rem;
+    padding: 1.5rem;
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.discussion-question h4 {
+    color: hsl(0 84% 15%);
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+}
+
+.discussion-question ul {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.discussion-question li {
+    color: hsl(0 84% 20%);
+    margin-bottom: 0.5rem;
+    font-style: italic;
+}
+
+/* Essay Theme Section */
+.essay-theme {
+    background: hsl(210 40% 98%);
+    border: 2px solid hsl(210 40% 85%);
+    margin: 1rem 2rem;
+    padding: 1.5rem;
+    border-radius: var(--radius);
+}
+
+.essay-theme h4 {
+    color: hsl(210 40% 15%);
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+}
+
+.essay-theme .requirements {
+    background: hsl(var(--background));
+    border-left: 3px solid hsl(210 40% 70%);
+    padding: 1rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+}
+
+.essay-theme .requirements strong {
+    color: hsl(210 40% 15%);
+}
+
+/* Answer Key Styling */
+.answer-key {
+    background: hsl(120 40% 98%);
+    border: 1px solid hsl(120 40% 85%);
+    border-radius: var(--radius);
+    margin: 1rem 0;
+    overflow: hidden;
+}
+
+.answer-key summary {
+    background: hsl(120 40% 90%) !important;
+    color: hsl(120 40% 15%) !important;
+    padding: 1rem;
+    font-weight: 600;
+}
+
+.answer-key summary:hover {
+    background: hsl(120 40% 85%) !important;
+}
+
+.answer-key details[open] summary {
+    background: hsl(120 40% 85%) !important;
+}
+
+/* Responsive Lesson Layout */
+@media (max-width: 768px) {
+    .lesson-container h1 {
+        font-size: 1.75rem;
+        padding: 1.5rem;
+    }
+
+    .lesson-container h2 {
+        font-size: 1.25rem;
+        padding: 0.75rem 1rem;
+        margin: 1.5rem 0 1rem 0;
+    }
+
+    .lesson-container h3 {
+        font-size: 1.1rem;
+        padding: 0 1rem;
+    }
+
+    .lesson-container p,
+    .lesson-container ul,
+    .lesson-container ol {
+        padding: 0 1rem;
+    }
+
+    .lesson-container table {
+        width: calc(100% - 2rem);
+        margin: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .lesson-container th,
+    .lesson-container td {
+        padding: 0.5rem;
+    }
+
+    .exercise {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .lesson-container details {
+        margin: 1rem;
+    }
+
+    .discussion-question,
+    .essay-theme {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .word-bank ul {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .word-bank li {
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .lesson-container h1 {
+        font-size: 1.5rem;
+        padding: 1rem;
+    }
+
+    .lesson-container h2 {
+        font-size: 1.1rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .lesson-container p,
+    .lesson-container ul,
+    .lesson-container ol {
+        padding: 0 0.75rem;
+    }
+
+    .lesson-container table {
+        width: calc(100% - 1.5rem);
+        margin: 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .exercise {
+        margin: 0.75rem;
+        padding: 0.75rem;
+    }
+
+    .lesson-container details {
+        margin: 0.75rem;
+    }
+
+    .discussion-question,
+    .essay-theme {
+        margin: 0.75rem;
+        padding: 0.75rem;
+    }
+}
+
+/* Print Styles for Lessons */
+@media print {
+    .lesson-container {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+
+    .lesson-container details summary {
+        display: none;
+    }
+
+    .lesson-container details {
+        border: none;
+    }
+
+    .lesson-container details > *:not(summary) {
+        padding: 0;
+    }
+
+    .exercise {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .lesson-container h1,
+    .lesson-container h2 {
+        break-after: avoid;
+        page-break-after: avoid;
+    }
+}
