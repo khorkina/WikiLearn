@@ -51,3 +51,4 @@ python-docx
 python-dotenv
 requests
 trafilatura
+openai

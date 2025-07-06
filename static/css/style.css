@@ -198,6 +198,38 @@ body {
     margin-top: 0.25rem;
 }
 
+/* Help Button Styles */
+.help-button-container {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.help-button {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    color: hsl(var(--primary-foreground));
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: var(--radius);
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.help-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    filter: brightness(1.1);
+}
+
+.help-button i {
+    font-size: 1.1rem;
+}
+
 /* Category Grid Styles - Ko-fi Inspired */
 .category-grid {
     display: grid;
@@ -587,6 +619,9 @@ body {
     position: relative;
     overflow: hidden;
     min-width: 140px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
 }
 
 .english-level-btn::before {
@@ -614,10 +649,21 @@ body {
 
 .english-level-btn.active {
     background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
-    color: hsl(var(--primary-foreground));
+    color: hsl(var(--primary-foreground)) !important;
     border-color: hsl(var(--primary));
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+.english-level-btn.active::before {
+    left: 0;
+}
+
+.english-level-btn span {
+    position: relative;
+    z-index: 3;
+}
 }
 
 .english-level-btn.active::before {
