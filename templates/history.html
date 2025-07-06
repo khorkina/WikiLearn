@@ -1,0 +1,258 @@
+{% extends "layout.html" %}
+
+{% block title %}History - WikiLearn{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="articles-header">
+        <h1><i class="fas fa-history"></i> Your Learning History</h1>
+        <p>Track your reading progress and revisit favorite articles</p>
+    </div>
+
+    <!-- Usage Status -->
+    <div id="usageStatus" class="usage-status" style="display: none;">
+        <div class="usage-counter" id="usageCounter"></div>
+        <div id="usageMessage"></div>
+        <div class="upgrade-prompt" id="upgradePrompt" style="display: none;">
+            <button class="upgrade-btn">
+                <i class="fas fa-crown"></i>
+                Upgrade to Premium
+            </button>
+        </div>
+    </div>
+
+    <!-- History Filter -->
+    <div class="filter-toggle">
+        <label>
+            <input type="checkbox" id="showOnlyLearned">
+            <i class="fas fa-graduation-cap"></i>
+            Show only articles with summaries/lessons
+        </label>
+    </div>
+
+    <!-- History List -->
+    <div id="historyContainer" class="article-feed">
+        <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>Loading your history...</p>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyHistory" class="no-more-articles" style="display: none;">
+        <i class="fas fa-history" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+        <h3>No History Yet</h3>
+        <p>Start exploring Wikipedia articles to build your learning history</p>
+        <a href="/" class="read-more-btn">
+            <i class="fas fa-home"></i>
+            Go to Home
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+class HistoryManager {
+    constructor() {
+        this.historyContainer = document.getElementById('historyContainer');
+        this.emptyHistory = document.getElementById('emptyHistory');
+        this.showOnlyLearned = document.getElementById('showOnlyLearned');
+        this.usageStatus = document.getElementById('usageStatus');
+        this.usageCounter = document.getElementById('usageCounter');
+        this.usageMessage = document.getElementById('usageMessage');
+        this.upgradePrompt = document.getElementById('upgradePrompt');
+        
+        this.init();
+    }
+
+    async init() {
+        try {
+            await window.wikiDB.init();
+            await this.loadUsageStatus();
+            await this.loadHistory();
+            this.setupEventListeners();
+        } catch (error) {
+            console.error('Error initializing history:', error);
+            this.showError('Failed to load history');
+        }
+    }
+
+    setupEventListeners() {
+        this.showOnlyLearned.addEventListener('change', () => {
+            this.loadHistory();
+        });
+    }
+
+    async loadUsageStatus() {
+        try {
+            const stats = await window.wikiDB.getUsageStats();
+            
+            if (stats.isPremium) {
+                this.usageCounter.innerHTML = '<i class="fas fa-crown text-warning"></i> Premium User';
+                this.usageMessage.textContent = 'Unlimited summaries and lessons';
+                this.usageStatus.classList.remove('warning', 'danger');
+            } else {
+                this.usageCounter.textContent = `${stats.summariesUsed}/1 summaries, ${stats.lessonsUsed}/1 lessons today`;
+                
+                const totalRemaining = stats.summariesRemaining + stats.lessonsRemaining;
+                
+                if (totalRemaining === 0) {
+                    this.usageMessage.textContent = 'Daily limit reached';
+                    this.usageStatus.classList.add('danger');
+                    this.upgradePrompt.style.display = 'block';
+                } else if (totalRemaining === 1) {
+                    this.usageMessage.textContent = '1 generation remaining today';
+                    this.usageStatus.classList.add('warning');
+                } else {
+                    this.usageMessage.textContent = `${totalRemaining} generations remaining today`;
+                    this.usageStatus.classList.remove('warning', 'danger');
+                }
+            }
+            
+            this.usageStatus.style.display = 'block';
+        } catch (error) {
+            console.error('Error loading usage status:', error);
+        }
+    }
+
+    async loadHistory() {
+        try {
+            this.showLoading();
+            
+            const history = await window.wikiDB.getHistory();
+            const filtered = this.showOnlyLearned.checked 
+                ? history.filter(item => item.type === 'summary' || item.type === 'lesson')
+                : history;
+
+            if (filtered.length === 0) {
+                this.showEmpty();
+                return;
+            }
+
+            this.renderHistory(filtered);
+        } catch (error) {
+            console.error('Error loading history:', error);
+            this.showError('Failed to load history');
+        }
+    }
+
+    showLoading() {
+        this.historyContainer.innerHTML = `
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading your history...</p>
+            </div>
+        `;
+        this.emptyHistory.style.display = 'none';
+    }
+
+    showEmpty() {
+        this.historyContainer.innerHTML = '';
+        this.emptyHistory.style.display = 'block';
+    }
+
+    showError(message) {
+        this.historyContainer.innerHTML = `
+            <div class="error-message">
+                <i class="fas fa-exclamation-triangle"></i>
+                ${message}
+            </div>
+        `;
+        this.emptyHistory.style.display = 'none';
+    }
+
+    renderHistory(history) {
+        this.emptyHistory.style.display = 'none';
+        
+        const groupedHistory = this.groupHistoryByDate(history);
+        
+        let html = '';
+        for (const [date, items] of Object.entries(groupedHistory)) {
+            html += `
+                <div class="history-section" style="grid-column: 1 / -1;">
+                    <h3 class="history-date">${date}</h3>
+                </div>
+            `;
+            
+            items.forEach(item => {
+                html += this.renderHistoryItem(item);
+            });
+        }
+        
+        this.historyContainer.innerHTML = html;
+    }
+
+    groupHistoryByDate(history) {
+        const grouped = {};
+        
+        history.forEach(item => {
+            const date = new Date(item.timestamp);
+            const dateStr = this.formatDate(date);
+            
+            if (!grouped[dateStr]) {
+                grouped[dateStr] = [];
+            }
+            grouped[dateStr].push(item);
+        });
+        
+        return grouped;
+    }
+
+    formatDate(date) {
+        const today = new Date();
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        
+        if (date.toDateString() === today.toDateString()) {
+            return 'Today';
+        } else if (date.toDateString() === yesterday.toDateString()) {
+            return 'Yesterday';
+        } else {
+            return date.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+        }
+    }
+
+    renderHistoryItem(item) {
+        const time = new Date(item.timestamp).toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        const typeIcon = item.type === 'summary' ? 'fa-file-text' : 
+                        item.type === 'lesson' ? 'fa-graduation-cap' : 'fa-eye';
+        const typeColor = item.type === 'summary' ? 'text-primary' : 
+                         item.type === 'lesson' ? 'text-success' : 'text-muted';
+
+        return `
+            <div class="article-card visible">
+                <div class="article-content">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h3 class="article-title">${item.articleTitle}</h3>
+                        <small class="text-muted">${time}</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas ${typeIcon} ${typeColor} me-2"></i>
+                        <span class="text-capitalize ${typeColor}">${item.type}</span>
+                    </div>
+                    <a href="${item.articleUrl}" class="read-more-btn">
+                        <i class="fas fa-arrow-right"></i>
+                        Revisit Article
+                    </a>
+                </div>
+            </div>
+        `;
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    new HistoryManager();
+});
+</script>
+{% endblock %}

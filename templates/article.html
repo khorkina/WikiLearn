@@ -17,6 +17,18 @@
     </div>
     
 
+    <!-- Usage Status Display -->
+    <div id="usageStatus" class="usage-status" style="display: none;">
+        <div class="usage-counter" id="usageCounter"></div>
+        <div id="usageMessage"></div>
+        <div class="upgrade-prompt" id="upgradePrompt" style="display: none;">
+            <button class="upgrade-btn">
+                <i class="fas fa-crown"></i>
+                Upgrade to Premium
+            </button>
+        </div>
+    </div>
+
     <div class="english-level-section">
         <h2>Select Your English Level</h2>
         <div class="english-level-options">
@@ -47,4 +59,102 @@
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/puter_enhanced.js') }}"></script>
+<script>
+// Track article view and display usage status
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // Initialize database
+        await window.wikiDB.init();
+        
+        // Track article view
+        const articleTitle = document.getElementById('article-title').value;
+        await window.wikiDB.addToHistory(articleTitle, window.location.href, 'view');
+        
+        // Display usage status
+        await displayUsageStatus();
+        
+        // Setup generation buttons
+        setupGenerationButtons();
+        
+    } catch (error) {
+        console.error('Error initializing article page:', error);
+    }
+});
+
+async function displayUsageStatus() {
+    try {
+        const stats = await window.wikiDB.getUsageStats();
+        const usageStatus = document.getElementById('usageStatus');
+        const usageCounter = document.getElementById('usageCounter');
+        const usageMessage = document.getElementById('usageMessage');
+        const upgradePrompt = document.getElementById('upgradePrompt');
+        
+        if (stats.isPremium) {
+            usageCounter.innerHTML = '<i class="fas fa-crown text-warning"></i> Premium User';
+            usageMessage.textContent = 'Unlimited summaries and lessons';
+            usageStatus.classList.remove('warning', 'danger');
+        } else {
+            usageCounter.textContent = `${stats.summariesUsed}/1 summaries, ${stats.lessonsUsed}/1 lessons today`;
+            
+            const totalRemaining = stats.summariesRemaining + stats.lessonsRemaining;
+            
+            if (totalRemaining === 0) {
+                usageMessage.textContent = 'Daily limit reached - upgrade for unlimited access';
+                usageStatus.classList.add('danger');
+                upgradePrompt.style.display = 'block';
+            } else if (totalRemaining === 1) {
+                usageMessage.textContent = '1 generation remaining today';
+                usageStatus.classList.add('warning');
+            } else {
+                usageMessage.textContent = `${totalRemaining} generations remaining today`;
+                usageStatus.classList.remove('warning', 'danger');
+            }
+        }
+        
+        usageStatus.style.display = 'block';
+    } catch (error) {
+        console.error('Error displaying usage status:', error);
+    }
+}
+
+function setupGenerationButtons() {
+    // English level selection
+    document.querySelectorAll('.english-level-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Remove active class from all buttons
+            document.querySelectorAll('.english-level-btn').forEach(b => {
+                b.classList.remove('active');
+            });
+            
+            // Add active class to clicked button
+            btn.classList.add('active');
+            
+            // Update hidden input
+            document.getElementById('selected-level').value = btn.dataset.level;
+        });
+    });
+
+    // Summary generation
+    document.getElementById('generate-summary-btn').addEventListener('click', async () => {
+        const articleTitle = document.getElementById('article-title').value;
+        const englishLevel = document.getElementById('selected-level').value;
+        
+        // Create summary section if it doesn't exist
+        let summarySection = document.getElementById('summary-section');
+        if (!summarySection) {
+            summarySection = document.createElement('div');
+            summarySection.id = 'summary-section';
+            summarySection.className = 'summary-container';
+            summarySection.innerHTML = '<div id="summary-content"></div>';
+            
+            // Insert after english level section
+            const levelSection = document.querySelector('.english-level-section');
+            levelSection.parentNode.insertBefore(summarySection, levelSection.nextSibling);
+        }
+        
+        await generateSummaryWithOpenAI(articleTitle, englishLevel);
+        await displayUsageStatus(); // Refresh usage display
+    });
+}
+</script>
 {% endblock %}

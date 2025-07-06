@@ -1,0 +1,478 @@
+{% extends "layout.html" %}
+
+{% block title %}Account - WikiLearn{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="articles-header">
+        <h1><i class="fas fa-user"></i> Your Account</h1>
+        <p>Manage your learning preferences and subscription</p>
+    </div>
+
+    <!-- Account Status Card -->
+    <div class="account-card">
+        <div class="account-header">
+            <div class="account-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="account-info">
+                <h2 id="accountStatus">Learning Account</h2>
+                <p id="accountId" class="text-muted">Loading...</p>
+            </div>
+        </div>
+
+        <!-- Subscription Status -->
+        <div class="subscription-section">
+            <h3><i class="fas fa-crown"></i> Subscription</h3>
+            <div id="subscriptionCard" class="subscription-card">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading subscription status...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usage Statistics -->
+        <div class="usage-section">
+            <h3><i class="fas fa-chart-bar"></i> Today's Usage</h3>
+            <div id="usageStats" class="usage-stats">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading usage statistics...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Learning Preferences -->
+        <div class="preferences-section">
+            <h3><i class="fas fa-cogs"></i> Learning Preferences</h3>
+            <div class="preference-item">
+                <label for="englishLevel">English Level:</label>
+                <select id="englishLevel" class="form-select">
+                    <option value="elementary">Elementary (A1-A2)</option>
+                    <option value="intermediate" selected>Intermediate (B1-B2)</option>
+                    <option value="professional">Professional (C1-C2)</option>
+                </select>
+            </div>
+            <div class="preference-item">
+                <label for="notifications">
+                    <input type="checkbox" id="notifications" checked>
+                    Enable learning notifications
+                </label>
+            </div>
+            <button id="savePreferences" class="btn-primary">
+                <i class="fas fa-save"></i>
+                Save Preferences
+            </button>
+        </div>
+
+        <!-- Data Management -->
+        <div class="data-section">
+            <h3><i class="fas fa-database"></i> Data Management</h3>
+            <p class="text-muted">All your data is stored locally in your browser</p>
+            <div class="data-actions">
+                <button id="exportData" class="btn-secondary">
+                    <i class="fas fa-download"></i>
+                    Export Data
+                </button>
+                <button id="clearData" class="btn-danger">
+                    <i class="fas fa-trash"></i>
+                    Clear All Data
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block head_extra %}
+<style>
+.account-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin: 2rem 0;
+}
+
+.account-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid hsl(var(--border));
+}
+
+.account-avatar {
+    width: 60px;
+    height: 60px;
+    background: hsl(var(--primary));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: hsl(var(--primary-foreground));
+}
+
+.account-info h2 {
+    margin: 0;
+    color: hsl(var(--foreground));
+}
+
+.subscription-section, .usage-section, .preferences-section, .data-section {
+    margin: 2rem 0;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid hsl(var(--border));
+}
+
+.subscription-section:last-child, .usage-section:last-child, 
+.preferences-section:last-child, .data-section:last-child {
+    border-bottom: none;
+}
+
+.subscription-card {
+    background: hsl(var(--muted));
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.subscription-card.premium {
+    background: linear-gradient(135deg, #ffc107, #ffb300);
+    color: #333;
+}
+
+.subscription-card.free {
+    background: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+}
+
+.usage-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.usage-stat {
+    background: hsl(var(--muted));
+    padding: 1rem;
+    border-radius: var(--radius);
+    text-align: center;
+}
+
+.usage-stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: hsl(var(--foreground));
+}
+
+.usage-stat-label {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.9rem;
+}
+
+.preference-item {
+    margin: 1rem 0;
+}
+
+.preference-item label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: hsl(var(--foreground));
+}
+
+.form-select {
+    width: 100%;
+    max-width: 300px;
+    padding: 0.5rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+}
+
+.preference-item input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+
+.data-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .account-card {
+        padding: 1rem;
+    }
+    
+    .data-actions {
+        flex-direction: column;
+    }
+    
+    .data-actions button {
+        width: 100%;
+    }
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+class AccountManager {
+    constructor() {
+        this.accountStatus = document.getElementById('accountStatus');
+        this.accountId = document.getElementById('accountId');
+        this.subscriptionCard = document.getElementById('subscriptionCard');
+        this.usageStats = document.getElementById('usageStats');
+        this.englishLevel = document.getElementById('englishLevel');
+        this.notifications = document.getElementById('notifications');
+        this.savePreferences = document.getElementById('savePreferences');
+        this.exportData = document.getElementById('exportData');
+        this.clearData = document.getElementById('clearData');
+        
+        this.init();
+    }
+
+    async init() {
+        try {
+            await window.wikiDB.init();
+            await this.loadAccountInfo();
+            await this.loadSubscriptionStatus();
+            await this.loadUsageStats();
+            await this.loadPreferences();
+            this.setupEventListeners();
+        } catch (error) {
+            console.error('Error initializing account:', error);
+        }
+    }
+
+    setupEventListeners() {
+        this.savePreferences.addEventListener('click', () => {
+            this.saveUserPreferences();
+        });
+
+        this.exportData.addEventListener('click', () => {
+            this.exportUserData();
+        });
+
+        this.clearData.addEventListener('click', () => {
+            this.confirmClearData();
+        });
+    }
+
+    async loadAccountInfo() {
+        try {
+            const user = await window.wikiDB.getUser();
+            this.accountId.textContent = `User ID: ${user.id}`;
+            
+            if (user.isPremium) {
+                this.accountStatus.innerHTML = '<i class="fas fa-crown text-warning"></i> Premium Account';
+            } else {
+                this.accountStatus.innerHTML = '<i class="fas fa-user"></i> Free Account';
+            }
+        } catch (error) {
+            console.error('Error loading account info:', error);
+            this.accountId.textContent = 'Error loading account';
+        }
+    }
+
+    async loadSubscriptionStatus() {
+        try {
+            const user = await window.wikiDB.getUser();
+            
+            if (user.isPremium) {
+                this.subscriptionCard.className = 'subscription-card premium';
+                this.subscriptionCard.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4><i class="fas fa-crown"></i> Premium Subscriber</h4>
+                            <p>Unlimited summaries and lessons</p>
+                        </div>
+                        <div class="text-success">
+                            <i class="fas fa-check-circle" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                    <p class="mt-2 small">
+                        Upgraded: ${new Date(user.upgradeDate).toLocaleDateString()}
+                    </p>
+                `;
+            } else {
+                this.subscriptionCard.className = 'subscription-card free';
+                this.subscriptionCard.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4><i class="fas fa-user"></i> Free Account</h4>
+                            <p>1 summary + 1 lesson per day</p>
+                        </div>
+                        <div>
+                            <button class="upgrade-btn">
+                                <i class="fas fa-crown"></i>
+                                Upgrade
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error loading subscription status:', error);
+        }
+    }
+
+    async loadUsageStats() {
+        try {
+            const stats = await window.wikiDB.getUsageStats();
+            
+            this.usageStats.innerHTML = `
+                <div class="usage-stat">
+                    <div class="usage-stat-number">${stats.summariesUsed}</div>
+                    <div class="usage-stat-label">Summaries Today</div>
+                </div>
+                <div class="usage-stat">
+                    <div class="usage-stat-number">${stats.lessonsUsed}</div>
+                    <div class="usage-stat-label">Lessons Today</div>
+                </div>
+                <div class="usage-stat">
+                    <div class="usage-stat-number">${stats.totalUsage}</div>
+                    <div class="usage-stat-label">Total Usage</div>
+                </div>
+                <div class="usage-stat">
+                    <div class="usage-stat-number">${stats.isPremium ? '∞' : (stats.summariesRemaining + stats.lessonsRemaining)}</div>
+                    <div class="usage-stat-label">${stats.isPremium ? 'Unlimited' : 'Remaining Today'}</div>
+                </div>
+            `;
+        } catch (error) {
+            console.error('Error loading usage stats:', error);
+            this.usageStats.innerHTML = '<div class="error-message">Failed to load usage statistics</div>';
+        }
+    }
+
+    async loadPreferences() {
+        try {
+            const user = await window.wikiDB.getUser();
+            this.englishLevel.value = user.settings.englishLevel || 'intermediate';
+            this.notifications.checked = user.settings.notifications !== false;
+        } catch (error) {
+            console.error('Error loading preferences:', error);
+        }
+    }
+
+    async saveUserPreferences() {
+        try {
+            const user = await window.wikiDB.getUser();
+            user.settings.englishLevel = this.englishLevel.value;
+            user.settings.notifications = this.notifications.checked;
+            
+            // Update user in database
+            const transaction = window.wikiDB.db.transaction(['users'], 'readwrite');
+            const store = transaction.objectStore('users');
+            await store.put(user);
+            
+            // Show success message
+            this.showToast('Preferences saved successfully!', 'success');
+        } catch (error) {
+            console.error('Error saving preferences:', error);
+            this.showToast('Failed to save preferences', 'error');
+        }
+    }
+
+    async exportUserData() {
+        try {
+            const user = await window.wikiDB.getUser();
+            const history = await window.wikiDB.getHistory();
+            const stats = await window.wikiDB.getUsageStats();
+            
+            const exportData = {
+                user: user,
+                history: history,
+                stats: stats,
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+                type: 'application/json'
+            });
+            
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `wikilearn-data-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            this.showToast('Data exported successfully!', 'success');
+        } catch (error) {
+            console.error('Error exporting data:', error);
+            this.showToast('Failed to export data', 'error');
+        }
+    }
+
+    confirmClearData() {
+        if (confirm('Are you sure you want to clear all your data? This action cannot be undone.')) {
+            this.clearAllData();
+        }
+    }
+
+    async clearAllData() {
+        try {
+            // Clear IndexedDB
+            await indexedDB.deleteDatabase('WikiLearnDB');
+            
+            // Clear localStorage
+            localStorage.removeItem('wikilearn_user_id');
+            
+            this.showToast('All data cleared successfully!', 'success');
+            
+            // Reload page to reset state
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        } catch (error) {
+            console.error('Error clearing data:', error);
+            this.showToast('Failed to clear data', 'error');
+        }
+    }
+
+    showToast(message, type) {
+        const toast = document.createElement('div');
+        toast.className = `premium-toast ${type}`;
+        toast.innerHTML = `
+            <i class="fas ${type === 'success' ? 'fa-check' : 'fa-exclamation-triangle'}"></i>
+            <span>${message}</span>
+        `;
+        
+        document.body.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 10);
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    new AccountManager();
+});
+</script>
+{% endblock %}

@@ -135,3 +135,26 @@ def api_generate_exercise():
     except Exception as e:
         log.error(f"Exercise generation failed: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
+
+# ------------------------------------------------------------------
+# User Account & History routes
+# ------------------------------------------------------------------
+@app.route("/history")
+def history():
+    """User's learning history page"""
+    return render_template("history.html")
+
+@app.route("/account")
+def account():
+    """User account management page"""
+    return render_template("account.html")
+
+@app.route("/categories")
+def categories():
+    """Categories page - redirects to index for now"""
+    return redirect("/")
+
+@app.route("/categories/<category>")
+def category_redirect(category):
+    """Redirect old category URLs to subcategories"""
+    return redirect(f"/subcategories/{category}")

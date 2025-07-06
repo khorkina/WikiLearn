@@ -3,40 +3,74 @@
  * Uses latest Puter.js features and models for improved AI-based learning
  */
 
-// Function to generate a summary using OpenAI API
-function generateSummaryWithOpenAI(articleTitle, englishLevel) {
-    // Get the loading element
-    const summaryContent = document.getElementById('summary-content');
-    if (!summaryContent) return;
-    
-    // Show loading state
-    summaryContent.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Generating summary...</div>';
-    
-    // Call OpenAI API endpoint
-    fetch('/api/generate-summary', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            article_title: articleTitle,
-            english_level: englishLevel
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
+// Function to generate a summary using OpenAI API with usage tracking
+async function generateSummaryWithOpenAI(articleTitle, englishLevel) {
+    try {
+        // Initialize database if not already done
+        if (!window.wikiDB || !window.wikiDB.db) {
+            await window.wikiDB.init();
+        }
+
+        // Check usage limits
+        const limitCheck = await window.premiumManager.checkGenerationLimit('summary');
+        
+        if (!limitCheck.allowed) {
+            window.premiumManager.showLimitModal('summary');
+            return;
+        }
+
+        // Get the loading element
+        const summaryContent = document.getElementById('summary-content');
+        if (!summaryContent) return;
+        
+        // Show loading state
+        summaryContent.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Generating summary...</div>';
+        
+        // Call OpenAI API endpoint
+        const response = await fetch('/api/generate-summary', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                article_title: articleTitle,
+                english_level: englishLevel
+            })
+        });
+
+        const data = await response.json();
+
         if (data.success) {
+            // Record usage in database
+            await window.wikiDB.recordUsage('summary', articleTitle, {
+                englishLevel: englishLevel
+            });
+            
+            // Save generated content
+            await window.wikiDB.saveContent(articleTitle, 'summary', data.summary, englishLevel);
+            
+            // Add to history
+            await window.wikiDB.addToHistory(articleTitle, window.location.href, 'summary');
+            
+            // Format and display
             const formatted = formatAIResponse(data.summary);
             summaryContent.innerHTML = formatted;
             sessionStorage.setItem(`summary_${articleTitle}_${englishLevel}`, formatted);
+            
+            // Update navigation badges
+            if (window.bottomNav) {
+                window.bottomNav.updateUsageIndicators();
+            }
         } else {
             summaryContent.innerHTML = `<div class="error-message">Failed to generate summary: ${data.error}</div>`;
         }
-    })
-    .catch(error => {
+    } catch (error) {
         console.error('Error:', error);
-        summaryContent.innerHTML = '<div class="error-message">Failed to generate summary. Please try again later.</div>';
-    });
+        const summaryContent = document.getElementById('summary-content');
+        if (summaryContent) {
+            summaryContent.innerHTML = '<div class="error-message">Failed to generate summary. Please try again later.</div>';
+        }
+    }
 }
 
 // Function to try different models for summary generation
@@ -141,43 +175,74 @@ function generateBasicSummary(articleTitle, englishLevel, summaryContent) {
     summaryContent.innerHTML = summary;
 }
 
-// Function to generate a lesson using OpenAI API
-function generateLessonWithOpenAI(articleTitle, englishLevel) {
-    // Get the lesson container
-    const lessonContainer = document.getElementById('lesson-container');
-    if (!lessonContainer) return;
-    
-    // Show loading state
-    lessonContainer.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Generating lesson plan...</div>';
-    
-    // Call OpenAI API endpoint
-    fetch('/api/generate-lesson', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            article_title: articleTitle,
-            english_level: englishLevel
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
+// Function to generate a lesson using OpenAI API with usage tracking  
+async function generateLessonWithOpenAI(articleTitle, englishLevel) {
+    try {
+        // Initialize database if not already done
+        if (!window.wikiDB || !window.wikiDB.db) {
+            await window.wikiDB.init();
+        }
+
+        // Check usage limits
+        const limitCheck = await window.premiumManager.checkGenerationLimit('lesson');
+        
+        if (!limitCheck.allowed) {
+            window.premiumManager.showLimitModal('lesson');
+            return;
+        }
+
+        // Get the lesson container
+        const lessonContainer = document.getElementById('lesson-container');
+        if (!lessonContainer) return;
+        
+        // Show loading state
+        lessonContainer.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Generating lesson plan...</div>';
+        
+        // Call OpenAI API endpoint
+        const response = await fetch('/api/generate-lesson', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                article_title: articleTitle,
+                english_level: englishLevel
+            })
+        });
+
+        const data = await response.json();
+
         if (data.success) {
+            // Record usage in database
+            await window.wikiDB.recordUsage('lesson', articleTitle, {
+                englishLevel: englishLevel
+            });
+            
+            // Save generated content
+            await window.wikiDB.saveContent(articleTitle, 'lesson', data.lesson, englishLevel);
+            
+            // Add to history
+            await window.wikiDB.addToHistory(articleTitle, window.location.href, 'lesson');
+            
+            // Format and display
             const formatted = formatAIResponse(data.lesson);
             lessonContainer.innerHTML = formatted;
-            
-            // Store in session storage
-            const articleTitle = document.getElementById('article-title').value;
             sessionStorage.setItem(`lesson_${articleTitle}_${englishLevel}`, formatted);
+            
+            // Update navigation badges
+            if (window.bottomNav) {
+                window.bottomNav.updateUsageIndicators();
+            }
         } else {
             lessonContainer.innerHTML = `<div class="error-message">Failed to generate lesson: ${data.error}</div>`;
         }
-    })
-    .catch(error => {
+    } catch (error) {
         console.error('Error:', error);
-        lessonContainer.innerHTML = '<div class="error-message">Failed to generate lesson. Please try again later.</div>';
-    });
+        const lessonContainer = document.getElementById('lesson-container');
+        if (lessonContainer) {
+            lessonContainer.innerHTML = '<div class="error-message">Failed to generate lesson. Please try again later.</div>';
+        }
+    }
 }
 
 // Try different models for lesson generation
