@@ -1,0 +1,105 @@
+🎨 Design Guidelines for WikiLearn (Inspired by Ko-fi)
+The UI/UX of WikiLearn should feel calm, modern, and immediately accessible. Ko-fi is known for its soft visual language, minimal clutter, and clear user guidance — and those principles should carry over into WikiLearn.
+
+🧑‍🎨 Visual Style:
+Color Palette:
+
+Base tones: Beige, soft ivory, light sand, pastel cream
+
+Accent colors: Muted coral, dusty rose, warm gold, light sky blue (used sparingly for CTAs or highlights)
+
+Text: Mostly dark gray (#333) or warm black, never pure black/white contrast
+
+Typography:
+
+Use rounded, humanist sans-serif fonts (like Inter, Nunito, or Ko-fi’s custom font style)
+
+Maintain clear visual hierarchy:
+
+H1: Bold and warm
+
+H2/H3: Soft and smaller but still readable
+
+Body text: Comfortable line height, 16–18px font size on mobile
+
+Shadows and Depth:
+
+Use subtle shadows (10–15% opacity) for cards and modals to suggest layers without distraction
+
+Rounded corners everywhere (preferably border-radius: 1.25rem for cards and buttons)
+
+🖼️ Component Design:
+1. Homepage Layout
+Header with WikiLearn logo in soft gold or coral tone
+
+Hero section with a search bar and optional background vector illustration (faint, abstract shapes like waves or circles)
+
+Below that, a grid of soft category buttons (rounded rectangles with icons):
+
+Examples: 🧪 Science, 🎨 Art, 🏛️ History, 💼 Business
+
+When hovered/tapped: gentle elevation and color fade
+
+2. Category / Subcategory Browsing
+Display cards in infinite scroll
+
+Card components include:
+
+A Wikipedia image (rounded corners, soft border or drop shadow)
+
+Short summary from Wikipedia (2–3 lines, light serif or soft sans-serif font)
+
+A large and friendly “Learn” button (uses animated hover glow, Ko-fi style)
+
+Optional toggle switch “Show articles only with image”:
+
+Styled like Ko-fi donation toggles: pill shape, soft shadow, smooth animation
+
+3. Lesson & Summary Page
+Top section:
+
+Breadcrumb navigation (Home > Art > Modern Art > Article Title)
+
+Language level selector (radio buttons or dropdown, styled with soft cards)
+
+Below:
+
+Summary box (rounded, slightly elevated, calm background)
+
+Lesson content area with icons for:
+
+📘 Vocabulary
+
+🧠 Grammar
+
+📝 Extra Exercises
+
+✏️ "Create Lesson" (primary CTA — use Ko-fi style animated button)
+
+Premium warning (if needed): soft yellow or coral box with upgrade button, never aggressive or intrusive
+
+🔔 Interactive Details (Ko-fi-like microinteractions):
+All buttons should give instant visual feedback: ripple effect or color shift
+
+Transitions: smooth fades/slides (250–400ms) between views, no jarring animations
+
+Use soft sound cues (optional) for button presses or navigation like in cozy productivity tools
+
+Floating “Help” or “? Tips” button in bottom-right corner — styled like Ko-fi’s support bubble
+
+📱 Mobile First:
+One-column layout
+
+Sticky bottom navbar with icons: Home, Categories, History, Account
+
+Large tappable cards with high contrast outlines and plenty of whitespace
+
+Swipe gestures to navigate lessons and flashcards (inspired by cozy mobile apps)
+
+🤍 Emotional Tone:
+WikiLearn should feel like a safe, calm learning space.
+
+It’s not a strict education app; it’s a cozy tool to explore knowledge, especially for people learning languages.
+
+Think of it like a digital cafe for your brain — soft, intuitive, welcoming.
+

@@ -93,6 +93,11 @@
         {% block content %}{% endblock %}
     </main>
     
+    <!-- Ko-fi Style Help Button -->
+    <button class="help-button" onclick="showHelpModal()">
+        <i class="fas fa-question"></i>
+    </button>
+
     <footer class="text-center py-3 mt-5">
         <p class="small">WikiLearn &copy; 2025 - Learn English with Wikipedia and AI</p>
     </footer>
@@ -107,6 +112,67 @@
     <script src="{{ url_for('static', filename='js/database.js') }}"></script>
     <script src="{{ url_for('static', filename='js/premium.js') }}"></script>
     <script src="{{ url_for('static', filename='js/navigation.js') }}"></script>
+    
+    <!-- Ko-fi Style Help Modal -->
+    <script>
+    function showHelpModal() {
+        const modal = document.createElement('div');
+        modal.className = 'upgrade-modal help-modal';
+        modal.innerHTML = `
+            <div class="modal-backdrop">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2><i class="fas fa-graduation-cap" style="color: hsl(var(--accent));"></i> How to Use WikiLearn</h2>
+                        <button class="close-modal"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="help-section">
+                            <h3><i class="fas fa-search text-primary"></i> Explore Articles</h3>
+                            <p>Browse categories or search for Wikipedia articles that interest you.</p>
+                        </div>
+                        <div class="help-section">
+                            <h3><i class="fas fa-brain text-primary"></i> Choose Your Level</h3>
+                            <p>Select Elementary, Intermediate, or Professional to get content adapted to your English level.</p>
+                        </div>
+                        <div class="help-section">
+                            <h3><i class="fas fa-magic text-primary"></i> Generate Content</h3>
+                            <p>Create AI-powered summaries and interactive lessons from any article.</p>
+                        </div>
+                        <div class="help-section">
+                            <h3><i class="fas fa-crown text-warning"></i> Free vs Premium</h3>
+                            <p>Free users get 1 summary + 1 lesson per day. Premium users get unlimited access.</p>
+                        </div>
+                        <div class="help-section">
+                            <h3><i class="fas fa-history text-primary"></i> Track Progress</h3>
+                            <p>Your reading history and generated content are saved locally in your browser.</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="close-modal btn-primary">Got it!</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        setTimeout(() => modal.classList.add('show'), 10);
+
+        const closeButtons = modal.querySelectorAll('.close-modal');
+        closeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                modal.classList.remove('show');
+                setTimeout(() => modal.remove(), 300);
+            });
+        });
+
+        modal.querySelector('.modal-backdrop').addEventListener('click', (e) => {
+            if (e.target === modal.querySelector('.modal-backdrop')) {
+                modal.classList.remove('show');
+                setTimeout(() => modal.remove(), 300);
+            }
+        });
+    }
+    </script>
     
     {% block scripts %}{% endblock %}
 </body>

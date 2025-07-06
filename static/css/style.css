@@ -1,65 +1,83 @@
-/* WikiLearn - Main Stylesheet */
-/* KoFi-inspired design with white background, beige accents, light blue and red highlights */
+/* WikiLearn - Ko-fi Inspired Design */
+/* Calm, modern, and cozy learning environment */
 
 :root {
-    /* Color Palette */
-    --background: 0 0% 100%; /* White */
-    --foreground: 240 10% 3.9%; /* Dark Gray */
-    --card: 0 0% 100%; /* White */
-    --card-foreground: 240 10% 3.9%; /* Dark Gray */
-    --popover: 0 0% 100%; /* White */
-    --popover-foreground: 240 10% 3.9%; /* Dark Gray */
-    --primary: 39 100% 85%; /* Beige */
-    --primary-foreground: 26 83% 14%; /* Dark Brown */
-    --secondary: 210 40% 95%; /* Light Blue */
-    --secondary-foreground: 210 40% 15%; /* Dark Blue */
-    --muted: 210 40% 98%; /* Very Light Blue */
-    --muted-foreground: 215 16% 47%; /* Gray Blue */
-    --accent: 0 84% 95%; /* Light Red */
-    --accent-foreground: 0 84% 15%; /* Dark Red */
-    --destructive: 0 84% 60%; /* Red */
-    --destructive-foreground: 0 0% 98%; /* Off White */
-    --border: 214 32% 91%; /* Light Gray */
-    --input: 214 32% 91%; /* Light Gray */
-    --ring: 222 84% 5%; /* Dark */
-    --radius: 0.5rem;
+    /* Ko-fi Inspired Color Palette */
+    --background: 45 25% 97%; /* Soft ivory */
+    --foreground: 0 0% 20%; /* Warm dark gray (#333) */
+    --card: 45 35% 96%; /* Light sand */
+    --card-foreground: 0 0% 20%; /* Warm dark gray */
+    --popover: 45 35% 98%; /* Pastel cream */
+    --popover-foreground: 0 0% 20%; /* Warm dark gray */
+    --primary: 25 75% 75%; /* Muted coral */
+    --primary-foreground: 0 0% 98%; /* Soft white */
+    --secondary: 45 40% 90%; /* Beige */
+    --secondary-foreground: 0 0% 25%; /* Dark warm gray */
+    --muted: 45 30% 94%; /* Light sand */
+    --muted-foreground: 0 0% 45%; /* Medium gray */
+    --accent: 45 95% 80%; /* Warm gold */
+    --accent-foreground: 0 0% 20%; /* Dark gray */
+    --destructive: 15 75% 70%; /* Dusty rose */
+    --destructive-foreground: 0 0% 98%; /* Soft white */
+    --border: 45 20% 88%; /* Soft border */
+    --input: 45 25% 92%; /* Input background */
+    --ring: 25 75% 65%; /* Coral focus ring */
+    --sky-blue: 200 75% 85%; /* Light sky blue for highlights */
+    --radius: 1.25rem; /* Rounded corners everywhere */
 }
 
 * {
     border-color: hsl(var(--border));
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     line-height: 1.6;
     margin: 0;
     padding: 0;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-/* Header Styles */
+/* Header Styles - Ko-fi Inspired */
 .header {
     background: hsl(var(--card));
     border-bottom: 1px solid hsl(var(--border));
-    padding: 1rem 2rem;
+    padding: 1.5rem 2rem;
     position: sticky;
     top: 0;
     z-index: 1000;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(8px);
 }
 
 .logo {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: hsl(var(--primary-foreground));
+    font-size: 2rem;
+    font-weight: 700;
+    color: hsl(var(--accent-foreground));
+    letter-spacing: -0.02em;
+    transition: all 0.3s ease;
+}
+
+.logo:hover {
+    color: hsl(var(--primary));
+    transform: translateY(-1px);
 }
 
 .logo span {
-    color: hsl(var(--secondary-foreground));
+    color: hsl(var(--primary));
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .back-btn {
@@ -68,14 +86,19 @@ body {
     gap: 0.5rem;
     color: hsl(var(--muted-foreground));
     text-decoration: none;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1.25rem;
     border-radius: var(--radius);
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid hsl(var(--border));
 }
 
 .back-btn:hover {
-    background-color: hsl(var(--muted));
+    background: hsl(var(--muted));
     color: hsl(var(--foreground));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .back-btn i {
@@ -86,65 +109,79 @@ body {
     font-size: 0.9rem;
 }
 
-/* Wikipedia Search Styles */
+/* Wikipedia Search Styles - Ko-fi Inspired */
 .wiki-search-wrapper {
     position: relative;
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+    max-width: 700px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
 }
 
 .search-icon {
     position: absolute;
-    left: 2rem;
+    left: 2.5rem;
     top: 50%;
     transform: translateY(-50%);
-    color: hsl(var(--muted-foreground));
+    color: hsl(var(--primary));
     z-index: 10;
+    font-size: 1.2rem;
 }
 
 #wiki-search {
     width: 100%;
-    padding: 1rem 1rem 1rem 3rem;
+    padding: 1.25rem 1.25rem 1.25rem 3.5rem;
     border: 2px solid hsl(var(--border));
     border-radius: var(--radius);
-    font-size: 1rem;
-    background: hsl(var(--background));
-    transition: border-color 0.2s ease;
+    font-size: 1.1rem;
+    font-weight: 400;
+    background: hsl(var(--card));
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
 #wiki-search:focus {
     outline: none;
-    border-color: hsl(var(--secondary-foreground));
-    box-shadow: 0 0 0 3px hsla(var(--secondary), 0.3);
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 0 4px hsla(var(--primary), 0.2), 0 8px 32px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+#wiki-search::placeholder {
+    color: hsl(var(--muted-foreground));
+    font-weight: 400;
 }
 
 .suggest-list {
     position: absolute;
-    top: 100%;
-    left: 1rem;
-    right: 1rem;
+    top: calc(100% + 0.5rem);
+    left: 1.5rem;
+    right: 1.5rem;
     background: hsl(var(--popover));
     border: 1px solid hsl(var(--border));
     border-radius: var(--radius);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
     z-index: 1000;
-    max-height: 300px;
+    max-height: 350px;
     overflow-y: auto;
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0.5rem 0;
+    backdrop-filter: blur(8px);
 }
 
 .suggest-list li {
-    padding: 0.75rem 1rem;
+    padding: 1rem 1.5rem;
     cursor: pointer;
-    border-bottom: 1px solid hsl(var(--border));
-    transition: background-color 0.2s ease;
+    border-bottom: 1px solid hsla(var(--border), 0.5);
+    transition: all 0.3s ease;
+    margin: 0 0.5rem;
+    border-radius: 0.75rem;
 }
 
 .suggest-list li:hover {
-    background-color: hsl(var(--muted));
+    background: linear-gradient(135deg, hsl(var(--muted)), hsl(var(--secondary)));
+    transform: translateX(4px);
+    border-bottom-color: transparent;
 }
 
 .suggest-list li:last-child {
@@ -161,44 +198,75 @@ body {
     margin-top: 0.25rem;
 }
 
-/* Category Grid Styles */
+/* Category Grid Styles - Ko-fi Inspired */
 .category-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
-    padding: 2rem 0;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 3rem 0;
 }
 
 .category-card {
-    background: hsl(var(--card));
+    background: linear-gradient(135deg, hsl(var(--card)), hsl(var(--muted)));
     border: 1px solid hsl(var(--border));
     border-radius: var(--radius);
-    padding: 2rem;
+    padding: 2.5rem 2rem;
     text-align: center;
     text-decoration: none;
     color: hsl(var(--card-foreground));
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    position: relative;
+    overflow: hidden;
+}
+
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 0;
+}
+
+.category-card:hover::before {
+    opacity: 0.08;
 }
 
 .category-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
     border-color: hsl(var(--primary));
     color: hsl(var(--card-foreground));
 }
 
+.category-card > * {
+    position: relative;
+    z-index: 1;
+}
+
 .category-card i {
-    font-size: 3rem;
-    color: hsl(var(--primary-foreground));
-    margin-bottom: 1rem;
+    font-size: 3.5rem;
+    color: hsl(var(--primary));
+    margin-bottom: 1.5rem;
     display: block;
+    transition: all 0.4s ease;
+}
+
+.category-card:hover i {
+    transform: scale(1.1) rotate(5deg);
+    color: hsl(var(--accent-foreground));
 }
 
 .category-card h3 {
     margin: 0;
-    font-size: 1.25rem;
+    font-size: 1.4rem;
     font-weight: 600;
+    letter-spacing: -0.01em;
 }
 
 /* Subcategory List Styles */
@@ -284,12 +352,12 @@ body {
     accent-color: hsl(var(--secondary-foreground));
 }
 
-/* Article Feed Styles */
+/* Article Feed Styles - Ko-fi Inspired */
 .article-feed {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
 }
 
 .article-card {
@@ -297,13 +365,15 @@ body {
     border: 1px solid hsl(var(--border));
     border-radius: var(--radius);
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(32px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    position: relative;
 }
 
 .article-card.fade-in {
-    animation: fadeInUp 0.5s ease forwards;
+    animation: kofiCardEntrance 0.6s ease forwards;
 }
 
 .article-card.visible {
@@ -311,23 +381,33 @@ body {
     transform: translateY(0);
 }
 
-@keyframes fadeInUp {
-    to {
+@keyframes kofiCardEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(32px) scale(0.96);
+    }
+    100% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
 }
 
 .article-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+    border-color: hsla(var(--primary), 0.5);
 }
 
 .article-img {
     width: 100%;
-    height: 200px;
+    height: 220px;
     object-fit: cover;
     display: block;
+    transition: transform 0.4s ease;
+}
+
+.article-card:hover .article-img {
+    transform: scale(1.05);
 }
 
 .article-img.placeholder {
@@ -340,7 +420,7 @@ body {
 }
 
 .article-content {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
 }
 
 .article-title {
@@ -359,19 +439,42 @@ body {
 }
 
 .read-more-btn {
-    background: hsl(var(--primary));
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
     color: hsl(var(--primary-foreground));
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1.5rem;
     border-radius: var(--radius);
     text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: background-color 0.2s ease;
-    display: inline-block;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.read-more-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.read-more-btn:hover::before {
+    left: 100%;
 }
 
 .read-more-btn:hover {
-    background: hsl(39 100% 80%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--primary)));
     color: hsl(var(--primary-foreground));
 }
 
@@ -444,65 +547,122 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* English Level Selection */
+/* English Level Selection - Ko-fi Inspired */
 .english-level-section {
-    background: hsl(var(--muted));
-    padding: 2rem;
+    background: linear-gradient(135deg, hsl(var(--card)), hsl(var(--muted)));
+    padding: 3rem 2rem;
     border-radius: var(--radius);
-    margin: 2rem 0;
+    margin: 3rem 0;
     text-align: center;
+    border: 1px solid hsl(var(--border));
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 }
 
 .english-level-section h2 {
     color: hsl(var(--foreground));
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
 }
 
 .english-level-options {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1.5rem;
     justify-content: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2.5rem;
 }
 
 .english-level-btn {
     background: hsl(var(--card));
     border: 2px solid hsl(var(--border));
     color: hsl(var(--card-foreground));
-    padding: 0.75rem 1.5rem;
+    padding: 1rem 2rem;
     border-radius: var(--radius);
     cursor: pointer;
     font-weight: 500;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    min-width: 140px;
+}
+
+.english-level-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    transition: left 0.4s ease;
+    z-index: 0;
+}
+
+.english-level-btn:hover::before {
+    left: 0;
 }
 
 .english-level-btn:hover {
-    border-color: hsl(var(--secondary-foreground));
-    background: hsl(var(--secondary));
+    border-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .english-level-btn.active {
-    background: hsl(var(--secondary-foreground));
-    color: hsl(var(--secondary));
-    border-color: hsl(var(--secondary-foreground));
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    color: hsl(var(--primary-foreground));
+    border-color: hsl(var(--primary));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.english-level-btn.active::before {
+    left: 0;
+}
+
+.english-level-btn > * {
+    position: relative;
+    z-index: 1;
 }
 
 .generate-btn {
-    background: hsl(var(--primary));
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
     color: hsl(var(--primary-foreground));
     border: none;
-    padding: 1rem 2rem;
+    padding: 1.25rem 3rem;
     border-radius: var(--radius);
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.generate-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.generate-btn:hover::before {
+    left: 100%;
 }
 
 .generate-btn:hover {
-    background: hsl(39 100% 80%);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+    background: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--primary)));
 }
 
 /* Article Body */
@@ -801,20 +961,20 @@ body {
     }
 }
 
-/* Bottom Navigation Styles */
+/* Bottom Navigation Styles - Ko-fi Inspired */
 .bottom-navigation {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid #e0e0e0;
+    background: linear-gradient(135deg, hsla(var(--card), 0.95), hsla(var(--muted), 0.95));
+    backdrop-filter: blur(16px);
+    border-top: 1px solid hsl(var(--border));
     display: flex;
     justify-content: space-around;
-    padding: 8px 0;
+    padding: 12px 0;
     z-index: 1000;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12);
 }
 
 .nav-item {
@@ -829,47 +989,82 @@ body {
     flex-direction: column;
     align-items: center;
     text-decoration: none;
-    color: #666;
-    padding: 8px 4px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
+    color: hsl(var(--muted-foreground));
+    padding: 12px 8px;
+    border-radius: var(--radius);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    min-width: 60px;
 }
 
 .nav-item.active a {
-    color: #007bff;
-    background: rgba(0, 123, 255, 0.1);
+    color: hsl(var(--primary));
+    background: linear-gradient(135deg, hsla(var(--primary), 0.1), hsla(var(--accent), 0.1));
+    transform: translateY(-4px);
+}
+
+.nav-item.active a::before {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 3px;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    border-radius: 2px;
 }
 
 .nav-item i {
-    font-size: 20px;
-    margin-bottom: 4px;
+    font-size: 22px;
+    margin-bottom: 6px;
+    transition: all 0.3s ease;
 }
 
 .nav-item span {
     font-size: 12px;
     font-weight: 500;
+    letter-spacing: 0.01em;
 }
 
 .nav-item:hover a {
-    color: #007bff;
-    transform: translateY(-2px);
+    color: hsl(var(--primary));
+    transform: translateY(-4px);
+    background: linear-gradient(135deg, hsla(var(--primary), 0.08), hsla(var(--accent), 0.08));
+}
+
+.nav-item:hover i {
+    transform: scale(1.1);
 }
 
 .usage-badge {
     position: absolute;
-    top: 2px;
-    right: 8px;
-    background: #dc3545;
+    top: 4px;
+    right: 12px;
+    background: linear-gradient(135deg, hsl(var(--destructive)), hsl(15 85% 65%));
     color: white;
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    font-size: 10px;
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: pulse 2s infinite;
+    animation: kofiPulse 2s infinite;
+    border: 2px solid hsl(var(--card));
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes kofiPulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    50% { 
+        transform: scale(1.1);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
 }
 
 @keyframes pulse {
@@ -1138,55 +1333,78 @@ body {
     color: #dc3545;
 }
 
-/* Usage Limit Styles */
+/* Usage Limit Styles - Ko-fi Inspired */
 .usage-status {
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 15px;
-    margin: 15px 0;
+    background: linear-gradient(135deg, hsl(var(--card)), hsl(var(--muted)));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    padding: 2rem 1.5rem;
+    margin: 2rem 0;
     text-align: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
 .usage-status.warning {
-    background: #fff3cd;
-    border-color: #ffc107;
-    color: #856404;
+    background: linear-gradient(135deg, hsl(45 100% 96%), hsl(45 90% 92%));
+    border-color: hsl(var(--accent));
+    color: hsl(30 80% 30%);
+    box-shadow: 0 4px 16px hsla(var(--accent), 0.2);
 }
 
 .usage-status.danger {
-    background: #f8d7da;
-    border-color: #dc3545;
-    color: #721c24;
+    background: linear-gradient(135deg, hsl(15 100% 96%), hsl(15 90% 92%));
+    border-color: hsl(var(--destructive));
+    color: hsl(15 70% 30%);
+    box-shadow: 0 4px 16px hsla(var(--destructive), 0.2);
 }
 
 .usage-counter {
-    font-weight: bold;
-    font-size: 18px;
-    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
 }
 
 .upgrade-prompt {
-    margin-top: 10px;
+    margin-top: 1.5rem;
 }
 
 .upgrade-btn {
-    background: linear-gradient(135deg, #ffc107, #ffb300);
-    color: #333;
+    background: linear-gradient(135deg, hsl(var(--accent)), hsl(45 90% 75%));
+    color: hsl(var(--accent-foreground));
     border: none;
-    padding: 8px 16px;
-    border-radius: 5px;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
     cursor: pointer;
     font-weight: 600;
     transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 0.5rem;
+    font-size: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.upgrade-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.upgrade-btn:hover::before {
+    left: 100%;
 }
 
 .upgrade-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px hsla(var(--accent), 0.4);
+    background: linear-gradient(135deg, hsl(45 90% 75%), hsl(var(--accent)));
 }
 
 /* Responsive adjustments */
@@ -1225,5 +1443,203 @@ body {
 
     .back-btn span {
         display: none;
+    }
+}
+
+/* Hero Section for Homepage */
+.hero-section {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, hsl(var(--background)), hsl(var(--muted)));
+    margin-bottom: 2rem;
+    border-radius: var(--radius);
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: hsl(var(--foreground));
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: hsl(var(--muted-foreground));
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+/* Ko-fi Style Animations */
+@keyframes gentleFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+}
+
+.floating-element {
+    animation: gentleFloat 3s ease-in-out infinite;
+}
+
+/* Cozy Loading Animations */
+.loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid hsl(var(--border));
+    border-top: 3px solid hsl(var(--primary));
+    border-radius: 50%;
+    animation: cozySpinner 1s linear infinite;
+}
+
+@keyframes cozySpinner {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Ko-fi Inspired Form Elements */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: hsl(var(--foreground));
+}
+
+.form-input, .form-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid hsl(var(--border));
+    border-radius: var(--radius);
+    background: hsl(var(--card));
+    color: hsl(var(--foreground));
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus, .form-select:focus {
+    outline: none;
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 0 3px hsla(var(--primary), 0.2);
+    transform: translateY(-1px);
+}
+
+/* Soft Shadows and Depth */
+.soft-shadow {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.elevated-shadow {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.deep-shadow {
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+}
+
+/* Help Button (Ko-fi style) */
+.help-button {
+    position: fixed;
+    bottom: 120px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    color: hsl(var(--primary-foreground));
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.help-button:hover {
+    transform: translateY(-4px) scale(1.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Help Modal Styles */
+.help-modal .modal-body {
+    padding: 1.5rem;
+}
+
+.help-section {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: hsl(var(--muted));
+    border-radius: calc(var(--radius) * 0.75);
+    border-left: 4px solid hsl(var(--primary));
+}
+
+.help-section h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.help-section p {
+    margin-bottom: 0;
+    color: hsl(var(--muted-foreground));
+    line-height: 1.5;
+}
+
+/* Responsive Design Updates */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+        padding: 0 1rem;
+    }
+    
+    .hero-section {
+        padding: 3rem 1.5rem;
+    }
+    
+    .english-level-section {
+        padding: 2rem 1.5rem;
+    }
+    
+    .generate-btn {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+    }
+    
+    .help-button {
+        bottom: 100px;
+        right: 15px;
+        width: 48px;
+        height: 48px;
+    }
+}
+
+@media (max-width: 480px) {
+    .english-level-options {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .english-level-btn {
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    .hero-title {
+        font-size: 1.8rem;
     }
 }
