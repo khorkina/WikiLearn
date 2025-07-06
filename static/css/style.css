@@ -1003,17 +1003,7 @@ body {
     transform: translateY(-4px);
 }
 
-.nav-item.active a::before {
-    content: '';
-    position: absolute;
-    bottom: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 24px;
-    height: 3px;
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
-    border-radius: 2px;
-}
+
 
 .nav-item i {
     font-size: 22px;
@@ -1451,26 +1441,27 @@ body {
     text-align: center;
     padding: 4rem 2rem;
     background: linear-gradient(135deg, hsl(var(--background)), hsl(var(--muted)));
-    margin-bottom: 2rem;
+    margin: 2rem auto;
     border-radius: var(--radius);
+    max-width: 900px;
 }
 
 .hero-title {
     font-size: 3rem;
     font-weight: 700;
     color: hsl(var(--foreground));
-    margin-bottom: 1rem;
+    margin: 0 auto 1rem auto;
     letter-spacing: -0.02em;
+    text-align: center;
 }
 
 .hero-subtitle {
     font-size: 1.2rem;
     color: hsl(var(--muted-foreground));
-    margin-bottom: 3rem;
+    margin: 0 auto 3rem auto;
     max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
     line-height: 1.6;
+    text-align: center;
 }
 
 /* How it works section */
