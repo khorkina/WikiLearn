@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ article.title }} Summary - WikiLearn{% endblock %}
+
+{% block content %}
+<div class="article-container">
+    <div class="article-header">
+        <h1>Summary: {{ article.title }}</h1>
+        {% if article.image %}
+        <img src="{{ article.image }}" alt="{{ article.title }}" class="article-main-image">
+        {% endif %}
+    </div>
+    
+    <div class="summary-container">
+        <div class="summary-header">
+            <h2>Article Summary</h2>
+            <span class="summary-level">{{ english_levels[english_level] }}</span>
+        </div>
+        
+        <div id="summary-content" class="summary-content">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <span>Generating summary...</span>
+            </div>
+        </div>
+    </div>
+    
+    
+    <a id="create-lesson-btn" class="create-lesson-btn" href="/lesson/{{ article.title }}?level={{ english_level }}">
+        Create a Lesson
+    </a>
+    
+    <div class="extra-buttons">
+        <button id="train-grammar-btn" class="btn-secondary">Train Grammar</button>
+        <button id="train-vocabulary-btn" class="btn-secondary">Train Vocabulary</button>
+        <button id="extra-exercises-btn" class="btn-secondary">Extra Exercises</button>
+    </div>
+    
+    <!-- вывод упражнений в том же «бежевом» стиле, что и урок -->
+    <div id="extra-output" class="lesson-container"></div>
+    
+    <!-- Hidden inputs for JavaScript -->
+    <input type="hidden" id="article-title" value="{{ article.title }}">
+    <input type="hidden" id="english-level" value="{{ english_level }}">
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/puter_enhanced.js') }}"></script>
+{% endblock %}

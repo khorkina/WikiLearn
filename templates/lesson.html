@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ article.title }} Lesson - WikiLearn{% endblock %}
+
+{% block content %}
+<div class="article-container">
+    <div class="article-header">
+        <h1>Lesson: {{ article.title }}</h1>
+        <p>English Level: {{ english_levels[english_level] }}</p>
+        {% if article.image %}
+        <img src="{{ article.image }}" alt="{{ article.title }}" class="article-main-image">
+        {% endif %}
+    </div>
+    
+    <div id="lesson-container" class="lesson-container" data-generate="true">
+        <div class="loading">
+            <div class="loading-spinner"></div>
+            <span>Generating lesson plan...</span>
+        </div>
+    </div>
+    
+    <!-- Hidden inputs for JavaScript -->
+    <input type="hidden" id="article-title" value="{{ article.title }}">
+    <input type="hidden" id="english-level" value="{{ english_level }}">
+    <input type="hidden" id="article-content" value="{{ article.content }}">
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/puter_enhanced.js') }}"></script>
+{% endblock %}

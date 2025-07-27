@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ category }} Subcategories - WikiLearn{% endblock %}
+
+{% block content %}
+<div class="subcategory-header">
+    <h1>{{ category }}</h1>
+    <p>Select a subcategory to explore articles</p>
+</div>
+
+<ul class="subcategory-list">
+    {% for subcategory in subcategories %}
+    <li class="subcategory-item">
+        <a href="{{ url_for('articles', category=category, subcategory=subcategory) }}">
+            {{ subcategory }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
